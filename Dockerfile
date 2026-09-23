@@ -6,7 +6,8 @@ FROM base AS installer-dev
 WORKDIR /app
 COPY package.json package-lock.json ./
 
-RUN npm ci --ignore-scripts
+RUN  --mount=type=cache,target=/root/.npm \
+  npm ci --ignore-scripts
 
 
 FROM base AS installer-prod
@@ -14,7 +15,8 @@ FROM base AS installer-prod
 WORKDIR /app
 COPY package.json package-lock.json ./
 
-RUN npm ci  --omit=dev --ignore-scripts
+RUN --mount=type=cache,target=/root/.npm \
+  npm ci --omit=dev --ignore-scripts
 
 
 FROM base AS builder
@@ -42,8 +44,6 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/next.config.ts ./next.config.ts
-
-RUN chown -R node:node /app
 
 USER node
 
