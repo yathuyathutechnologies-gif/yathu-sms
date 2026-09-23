@@ -18,11 +18,13 @@ export function Table<TData>({
   data,
   ...props
 }: TableProps<TData>) {
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
   return (
     <table data-slot="table" className={cn("data-table", className)} {...props}>
       <thead>

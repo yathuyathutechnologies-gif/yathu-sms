@@ -74,7 +74,7 @@ export default function Menu({ MenuClosingRef, orangeTechRef }) {
         });
 
         return () => ctx.revert();
-    }, []);
+    }, [topNavBarRef]);
 
     useLayoutEffect(() => {
         const ctx = gsap.context(() => {
@@ -102,7 +102,7 @@ export default function Menu({ MenuClosingRef, orangeTechRef }) {
         });
 
         return () => ctx.revert();
-    }, []);
+    }, [collegeRef]);
 
     useLayoutEffect(() => {
         const menu = menuRef.current;
