@@ -1,3 +1,4 @@
+import React from "react";
 import type { Metadata } from "next";
 import { Geist, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
@@ -35,7 +36,7 @@ const Inter = localFont({
   display: "swap"
 });
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html
       lang="en"
