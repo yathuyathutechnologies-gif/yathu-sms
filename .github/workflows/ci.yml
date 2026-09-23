@@ -42,7 +42,7 @@ jobs:
         run: npm run build
 
   ghcr-deploy:
-    name: Deploy to DockerHub
+    name: Deploy to GHCR
     runs-on: ubuntu-latest
     needs: build
     if: ${{ github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/chore/ci-cd-setup') }} # TODO: remove chore branch the pipeline is verified
