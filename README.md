@@ -30,7 +30,7 @@ docker run -p 3000:3000 yathu-sms
 **Run the pre-built image from GHCR** (published automatically on every push to `main`):
 
 ```bash
-docker run -p 3000:3000 ghcr.io/cyrusthindwa/yathu-sms:latest
+docker run -p 3000:3000 ghcr.io/yathuyathutechnologies-gif/yathu-sms:latest
 ```
 
 The app is available at `http://localhost:3000`.
