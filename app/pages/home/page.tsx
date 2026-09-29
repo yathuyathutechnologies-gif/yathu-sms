@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 
 export default function Home() {
@@ -50,12 +51,14 @@ export default function Home() {
           {/* Hero Image */}
           <div className="w-full lg:w-1/2 relative lg:absolute lg:right-0 lg:-top-8">
             <div 
-              className="rounded-[2.5rem] overflow-hidden shadow-xl min-h-[400px] lg:min-h-[500px]" 
+              className="rounded-[2.5rem] overflow-hidden shadow-xl min-h-[400px] lg:min-h-[500px] relative" 
                >
-              <img 
+              <Image 
                 alt="Student smiling and walking on campus" 
-                className="w-full h-full object-cover object-center absolute inset-0" 
-                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBO9g7shJ8SNRajnfMAiTlkFzIkZDUlS9L1TeCWO6PTu04bJDg-TwkvDCzqZsNXKjtc2Pt8kstE_rj0UPBTdFgf_3I3Mvc7xMKCklSRh6jVUixzY430ScPPFocJ-Y3e8uRJM8bQQBq7VV9WxeOJT7CPrW77kZ-xrUN-4x_F2-SmprxAKHQcOzsgHrnG2fjgN19TIbnTbiia4yu8VBXoB4b8Tg3T1PA2K0Nk2kEf28u744VfDvUBis1G" 
+                className="object-cover object-center" 
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuBO9g7shJ8SNRajnfMAiTlkFzIkZDUlS9L1TeCWO6PTu04bJDg-TwkvDCzqZsNXKjtc2Pt8kstE_rj0UPBTdFgf_3I3Mvc7xMKCklSRh6jVUixzY430ScPPFocJ-Y3e8uRJM8bQQBq7VV9WxeOJT7CPrW77kZ-xrUN-4x_F2-SmprxAKHQcOzsgHrnG2fjgN19TIbnTbiia4yu8VBXoB4b8Tg3T1PA2K0Nk2kEf28u744VfDvUBis1G"
+                fill
+                unoptimized
               />
             </div>
           </div>
@@ -70,11 +73,13 @@ export default function Home() {
             <h2 className="text-4xl md:text-5xl font-bold text-gray-700 mb-12 leading-tight">
               Trusted by thousands<br/>of Malawians
             </h2>
-            <div className="rounded-3xl overflow-hidden shadow-lg h-[400px] md:h-[500px] lg:h-[600px]">
-              <img 
+            <div className="rounded-3xl overflow-hidden shadow-lg h-[400px] md:h-[500px] lg:h-[600px] relative">
+              <Image 
                 alt="Students studying in a classroom" 
-                className="w-full h-full object-cover object-center" 
+                className="object-cover object-center" 
                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuA6anSkyCJTL6l54wg1XMV-N_DAKSnbPbJtlWafV-MMtrbTyvm6UZrUAWyxGl_p4zTzMIQ4QnIawtNJakG3l2YksZWJLkIjmM_a5pKrNQ8wA2GJd491gaI3mbAD5_JhnBCBW-WIlMSt3TT7wGNEs2myp79krBqk5e0KlypLl7CYc9AFEFUWj-Qvkg2B0T6-DqDtH7NgDPdzRJxr_bKgRuwM_8LezbkFIWiX9lwmDu5XzXbtfdJodn0Q"
+                fill
+                unoptimized
               />
             </div>
           </div>
