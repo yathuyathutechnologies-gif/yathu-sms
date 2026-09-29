@@ -2,7 +2,7 @@ name: CI
 on:
   push:
     branches:
-      - main
+      - chore/ci-cd-setup # TODO: remove chore branch the pipeline is verified
   pull_request:
     branches:
       - main
