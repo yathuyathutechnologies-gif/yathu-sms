@@ -1,10 +1,9 @@
 "use client";
-import { ComponentType, useLayoutEffect, useRef, useState } from 'react';
+import { ComponentType, useLayoutEffect, useRef } from 'react';
 import styles from './styles/staffSideMenu.module.css';
 import gsap from 'gsap';
 import { truncate } from '../functions/truncate';
-import { title } from 'process';
-import { Home, Icon, Sidebar } from 'lucide-react';
+import { Sidebar } from 'lucide-react';
 import HomeIcon from '../icons/HomeIcon';
 import StudentIcon from '../icons/StudentIcon';
 import { useStaffPortal } from '@/app/staffPortal/StaffPortalContext';
@@ -44,6 +43,44 @@ const StaffSideBarMenu = () => {
         mobileSidebarOpen,
         toggleMobileSidebar
     } = useStaffPortal();
+
+    const expandSideBarNavItems = (isExpanded: boolean) => {
+        const tl = gsap.timeline({});
+        if (!isExpanded) {
+            tl
+                .to(navTitleRef.current, {
+                    x: '-200px',
+                    ease: 'power1.in'
+                })
+                .to(navIconRef.current, {
+                    // x: '-10px',
+                    width: '90px',
+                    padding: '0px',
+                    gap: '0px',
+                    ease: 'power1.in'
+                })
+                .to(navTitleRef.current, {
+                    opacity: 0,
+                    ease: 'power1.in'
+                }, '<')
+        }
+        else {
+            tl
+                .to(navTitleRef.current, {
+                    opacity: 1,
+                    ease: 'power1.in'
+                }, '<')
+                .to(navIconRef.current, {
+                    x: 0,
+                    ease: 'power1.in'
+                }, '<')
+                .to(navTitleRef.current, {
+                    x: 0,
+                    ease: 'power1.in'
+                })
+
+        }
+    }
 
     useLayoutEffect(() => {
         const mm = gsap.matchMedia();
@@ -113,44 +150,6 @@ const StaffSideBarMenu = () => {
         // return () => mm.revert();
     }, [sidebarExpanded, mobileSidebarOpen]);
 
-
-    const expandSideBarNavItems = (isExpanded: boolean) => {
-        const tl = gsap.timeline({});
-        if (!isExpanded) {
-            tl
-                .to(navTitleRef.current, {
-                    x: '-200px',
-                    ease: 'power1.in'
-                })
-                .to(navIconRef.current, {
-                    // x: '-10px',
-                    width: '90px',
-                    padding: '0px',
-                    gap: '0px',
-                    ease: 'power1.in'
-                })
-                .to(navTitleRef.current, {
-                    opacity: 0,
-                    ease: 'power1.in'
-                }, '<')
-        }
-        else {
-            tl
-                .to(navTitleRef.current, {
-                    opacity: 1,
-                    ease: 'power1.in'
-                }, '<')
-                .to(navIconRef.current, {
-                    x: 0,
-                    ease: 'power1.in'
-                }, '<')
-                .to(navTitleRef.current, {
-                    x: 0,
-                    ease: 'power1.in'
-                })
-
-        }
-    }
     const handleNavItemClick = (link: string) => {
         if (link === '') {
             return

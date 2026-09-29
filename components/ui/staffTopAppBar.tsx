@@ -2,12 +2,10 @@
 import { BellDot, User2Icon } from 'lucide-react';
 import styles from './styles/staffTopAppBar.module.css';
 import MenuIcon from '@/components/icons/MenuIcon';
-import { useState } from 'react';
 import { useStaffPortal } from '@/app/staffPortal/StaffPortalContext';
 const StaffTopAppBar = () => {
 
     const {
-        mobileSidebarOpen,
         toggleMobileSidebar,
     } = useStaffPortal();
 

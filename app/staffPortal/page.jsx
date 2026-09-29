@@ -1,5 +1,5 @@
 "use client";
-import { memo, useState } from 'react';
+import { useState } from 'react';
 import styles from './styles/login.module.css';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -7,6 +7,7 @@ import { EyeClosed, EyeIcon } from 'lucide-react';
 
 const StaffLoginPage = () => {
     const [showPassword, setShowPassword] = useState(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [accessToken, setAccessToken] = useState(null);
 
     const router = useRouter()
