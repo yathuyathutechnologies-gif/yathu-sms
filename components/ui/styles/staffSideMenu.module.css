@@ -64,29 +64,31 @@
 
 .navItemsContainer {
     margin-top: 30px;
-    min-height: 120vh;
 }
 
 .navItemContainer {
     position: relative;
-    height: 30px;
+    height: 35px;
     display: flex;
     padding: 2px;
     font-size: 16px;
     font-weight: 400;
     gap: 1px;
     cursor: pointer;
-    transition: transform 0.3s ease, opacity 0.3s ease;
+    transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, opacity 0.3s ease;
 }
 
 .navItemContainer:hover {
     transform: translateY(-2px);
+    color:var(--accent-hover)
 }
 
 .navTitle {
     height: 100%;
     width: 75%;
     overflow: hidden;
+    display: flex;
+    align-items: center;
 }
 
 .navIcon {
@@ -101,6 +103,6 @@
     position: absolute;
     transform: translateX(-4px);
     width: 4px;
-    height: 24px;
-    background-color: black;
+    height: 34px;
+    background-color: var(--accent-color);
 }

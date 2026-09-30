@@ -9,21 +9,51 @@ import HomeIcon from '../icons/HomeIcon';
 import StudentIcon from '../icons/StudentIcon';
 import { useStaffPortal } from '@/app/staffPortal/StaffPortalContext';
 import { usePathname, useRouter } from 'next/navigation';
+import AssignmentIcon from '../icons/assignementIcon';
+import ClassIcon from '../icons/classIcon';
+import LectureIcon from '../icons/LectureIcon';
+import ExamIcon from '../icons/ExamIcon';
 interface navItem {
     title: string,
-    icon: ComponentType<{ color?: string }>,
-    navLink: string
+    icon: ComponentType<{ color?: string, size?: number }>,
+    navLink: string,
+    iconColor: string
 }
 const navItems: navItem[] = [
     {
         title: 'Home',
         icon: HomeIcon,
-        navLink: 'staffPortal/dashBoard'
+        navLink: 'staffPortal/dashBoard',
+        iconColor: 'black'
     },
     {
         title: 'Students',
         icon: StudentIcon,
-        navLink: ''
+        navLink: 'staffPortal/students',
+        iconColor: 'black'
+    },
+    {
+        title: 'Lectures',
+        icon: LectureIcon,
+        navLink: 'staffPortal/students',
+        iconColor: 'black'
+    },
+    {
+        title: 'Class',
+        icon: ClassIcon,
+        navLink: 'staffPortal/classes',
+        iconColor: 'black'
+    },
+    {
+        title: 'Assignment',
+        icon: AssignmentIcon,
+        navLink: 'staffPortal/students',
+        iconColor: 'black'
+    },  {
+        title: 'Exam',
+        icon: ExamIcon,
+        navLink: 'staffPortal/students',
+        iconColor: 'black'
     }
 ];
 const StaffSideBarMenu = () => {
@@ -34,8 +64,9 @@ const StaffSideBarMenu = () => {
     const toggleRef = useRef(null);
     const navTitleRef = useRef<(HTMLDivElement | null)[]>([]);
     const navIconRef = useRef<(HTMLDivElement | null)[]>([]);
-    const solidNavLeftBarRef = useRef(null);
+    const solidNavLeftBarRef = useRef<HTMLDivElement | null>(null);
     const navItemRef = useRef<(HTMLLIElement | null)[]>([]);
+    const previousActiveIndexRef = useRef<number>(-1);
     //use states
     // local storage
     const {
@@ -156,6 +187,11 @@ const StaffSideBarMenu = () => {
             return
         }
         route.push(`/${link}`);
+        const mm = gsap.matchMedia();
+
+        mm.add("(max-width: 768px)", () => {
+            toggleMobileSidebar();
+        });
     }
     const navList = navItems.map((item, index) => {
         const Icon = item.icon
@@ -184,7 +220,7 @@ const StaffSideBarMenu = () => {
     const pathname = usePathname();
     useLayoutEffect(() => {
         const activeIndex = navItems.findIndex(
-            (item) => pathname === `/${item.navLink}`
+            (item) => `/${item.navLink}` === pathname
         );
 
         if (activeIndex === -1) {
@@ -197,12 +233,109 @@ const StaffSideBarMenu = () => {
             return;
         }
 
-        gsap.to(solidNavLeftBarRef.current, {
-            y: activeItem.offsetTop,
-            duration: 0.3,
-            ease: "power2.out",
-        });
+        const activeTitle = activeItem.children[0];
+
+        const activeIcon = activeItem.querySelector(
+            `.${styles.navIcon}`
+        );
+
+        if (!activeIcon) {
+            return;
+        }
+
+        const previousIndex = previousActiveIndexRef.current;
+        const previousItem =
+            previousIndex !== -1
+                ? navItemRef.current[previousIndex]
+                : null;
+
+        const tl = gsap.timeline();
+
+        /*
+         * Reset previous active item
+         */
+        if (previousItem && previousItem !== activeItem) {
+            const previousTitle = previousItem.children[0];
+
+            const previousIcon = previousItem.querySelector(
+                `.${styles.navIcon}`
+            );
+
+            tl.to(previousItem, {
+                x: 0,
+                duration: 0.2,
+            });
+
+            tl.to(
+                previousTitle,
+                {
+                    color: "black",
+                    duration: 0.2,
+                },
+                "<"
+            );
+
+            if (previousIcon) {
+                tl.to(
+                    previousIcon,
+                    {
+                        color: "black",
+                        duration: 0.2,
+                    },
+                    "<"
+                );
+            }
+        }
+
+        /*
+         * Move active indicator
+         */
+        tl.to(
+            solidNavLeftBarRef.current,
+            {
+                y:
+                    activeItem.offsetTop -
+                    solidNavLeftBarRef.current.offsetTop,
+                duration: 0.3,
+                ease: "power2.out",
+            },
+            previousItem ? ">" : "<"
+        );
+
+        /*
+         * Animate new active item
+         */
+        tl.to(
+            activeItem,
+            {
+                x: 4,
+                duration: 0.2,
+            },
+            "<"
+        );
+
+        tl.to(
+            activeTitle,
+            {
+                color: "var(--accent-color)",
+                duration: 0.2,
+            },
+            "<"
+        );
+
+        tl.to(
+            activeIcon,
+            {
+                color: "var(--accent-color)",
+                duration: 0.2,
+            },
+            "<"
+        );
+
+        previousActiveIndexRef.current = activeIndex;
     }, [pathname]);
+
+
     return (
         <div className={styles.menuSideBar} ref={sideBarMenuRef}>
             {/* brand and expansion toogle */}

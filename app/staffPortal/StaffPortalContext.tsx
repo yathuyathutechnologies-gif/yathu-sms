@@ -32,13 +32,11 @@ export function StaffPortalProvider({
   const [sidebarExpanded, setSidebarExpanded] = useState<boolean>(() => {
     // localStorage doesn't exist during server rendering.
     if (typeof window === "undefined") {
-      console.log('window undefined.');
       return true;
     }
 
     const saved = window.localStorage.getItem("sidebarExpanded");
 
-    console.log("INITIAL SIDEBAR STATE:", saved);
 
     // No saved preference → expanded by default.
     if (saved === null) {

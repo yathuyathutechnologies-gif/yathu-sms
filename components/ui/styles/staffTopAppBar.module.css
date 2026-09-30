@@ -1,59 +1,68 @@
-.container{
-    position: relative;
+.container {
+    position: fixed;
     width: 100%;
     height: 60px;
     border-bottom: 1px solid #ccc;
+    z-index: 100;
+    background-color: var(--primary-color);
 }
-.actionButtonsList{
-    position: relative;
+
+.actionButtonsList {
+    position: fixed;
     width: 200px;
     height: 60px;
-    position: fixed;
     right: 30px;
     display: flex;
     display: flex;
-    justify-content:space-between;
+    justify-content: space-between;
     align-items: center;
 }
-.actionButtonsList li{
+
+.actionButtonsList li {
     flex-shrink: 1;
     padding: 4px;
 }
 
-.actionButtonsList > :nth-child(2){
+.actionButtonsList> :nth-child(2) {
     border: 1px solid #ccc;
     border-radius: 50%;
 }
-.actionButtonsList > :nth-child(3){
+
+.actionButtonsList> :nth-child(3) {
     padding-left: 8px;
     /* margin-left: 2px; */
 }
 
-.actionButtonsList> :nth-child(4){
+.actionButtonsList> :nth-child(4) {
     display: none;
 }
-.actionButtonsList>:nth-child(4)>:nth-child(1){
+
+.actionButtonsList>:nth-child(4)>:nth-child(1) {
     font-weight: bold;
     font-size: 16px;
 }
 
-.actionButtonsList>:nth-child(4)>:nth-child(2){
+.actionButtonsList>:nth-child(4)>:nth-child(2) {
     font-weight: normal;
     font-size: 12px;
 }
+
 @media (max-width:678px) {
-        .actionButtonsList{
-        width: 100px;right: 15px;
+    .actionButtonsList {
+        width: 100px;
+        right: 15px;
     }
 }
+
 @media (min-width:679px) {
 
-    .actionButtonsList> :nth-child(3){
+    .actionButtonsList> :nth-child(3) {
         display: none;
     }
-    .actionButtonsList> :nth-child(4){
+
+    .actionButtonsList> :nth-child(4) {
         display: block;
         width: 100px;
     }
-    
+
 }

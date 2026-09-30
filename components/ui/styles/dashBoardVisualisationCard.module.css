@@ -1,0 +1,75 @@
+.container {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
+
+.backgroundRec {
+    position: absolute;
+    opacity: 0.1;
+}
+
+.container,
+.backgroundRec {
+    width: 200px;
+    height: 100px;
+}
+
+.leftBar {
+    position: absolute;
+    background-color: black;
+    width: 4px;
+    height: 100%;
+    opacity: 1;
+}
+
+.details {
+    width: 64%;
+    position: relative;
+    padding: 20px 5px 4px 24px;
+    opacity: 1;
+}
+
+.title {
+    font-size: 16px;
+    font-weight: normal;
+}
+
+.quantity {
+    font-size: 30px;
+    font-weight: bold;
+}
+
+.icon {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    padding-right: 60px;
+}
+
+@media (max-width:768) {
+
+    .container,
+    .backgroundRec {
+        width: 120px;
+        height: 80px;
+    }
+
+    .details {
+        width: 50%;
+        padding: 20px 5px 4px 10px;
+    }
+
+    .icon {
+        padding: 24px 18px 0px 0px;
+    }
+
+    .quantity {
+        font-size: 18px;
+    }
+
+    .title {
+        font-size: 14px;
+    }
+}

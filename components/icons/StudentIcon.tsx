@@ -1,9 +1,13 @@
-import {User } from "lucide-react";
+import { GraduationCap, User } from "lucide-react";
 
-const StudentIcon = ({color="black", size = 24})=>{
-    return(
-        <User color={color}/>
-    );
-}
+const StudentIcon = ({
+    color = "currentColor",
+    size = 24,
+}: {
+    color?: string;
+    size?: number;
+}) => {
+    return <GraduationCap color={color} size={size} />;
+};
 
 export default StudentIcon;

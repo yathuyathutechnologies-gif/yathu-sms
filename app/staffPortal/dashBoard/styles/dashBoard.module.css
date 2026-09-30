@@ -1,0 +1,47 @@
+.container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.visualCardList {
+    width: 100%;
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 70px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 0px 24px 0px 24px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+@media (max-width:768) {
+    .visualCardList {
+        padding: 0px 16px 0px 16px;
+        gap: 40px;
+    }
+}
+
+.visualCardList::-webkit-scrollbar {
+    display: none;
+}
+
+.visualCardList li {
+    flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+    .visualCardList {
+        display: flex;
+        flex-wrap: wrap;
+        overflow-x: hidden;
+        overflow-y: auto;
+        gap: 20px;
+        justify-content: space-between;
+    }
+    .visualCardList li {
+        width: calc(50% - 10px);
+        flex-shrink: 0;
+    }
+}
