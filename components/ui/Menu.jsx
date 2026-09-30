@@ -15,21 +15,18 @@ export default function Menu({ MenuClosingRef, orangeTechRef }) {
     const menuRef = useRef(null);
     const menuItemsRef = useRef(null);
     const menuContainerRef = useRef(null);
-
     const whiteTextRef = useRef(null);
-
     const localOrangeTechRef = useRef(null);
     const collegeRef = orangeTechRef || localOrangeTechRef;
     const closeMenuRef = useRef(null);
-
     const router = useRouter();
     const menuItems = [
-        { id: 1, label: "Home" },
-        { id: 2, label: "About" },
-        { id: 4, label: "Administration" },
-        { id: 5, label: "Staff" },
-        { id: 6, label: "Students" },
-        { id: 7, label: "Apply" },
+        { id: 1, label: "Home", path: '/' },
+        { id: 2, label: "About", path: '' },
+        { id: 4, label: "Administration", path: '' },
+        { id: 5, label: "Staff", path: 'staffPortal' },
+        { id: 6, label: "Students", path: '' },
+        { id: 7, label: "Apply", path: '' },
     ];
 
     useLayoutEffect(() => {
@@ -93,7 +90,7 @@ export default function Menu({ MenuClosingRef, orangeTechRef }) {
                 delay: 1,
                 ease: "power2.out"
             });
-               gsap.to(college, {
+            gsap.to(college, {
                 text: "C",
                 duration: 0.4,
                 delay: 1.5,
@@ -192,10 +189,8 @@ export default function Menu({ MenuClosingRef, orangeTechRef }) {
         return () => mm.revert();
     }, []);
 
-    const handleMenuItemClick = (itemLabel) => {
-        console.log(itemLabel);
-        const path = itemLabel.toLowerCase()
-        console.log(path)
+    const handleMenuItemClick = (path) => {
+        console.log(path);
         router.push(`/${path}`)
     }
 
@@ -217,7 +212,7 @@ export default function Menu({ MenuClosingRef, orangeTechRef }) {
                         close
                     </div>
                     {menuItems.map((item) => (
-                        <li key={item.id} onClick={() => handleMenuItemClick(item.label)} className={style.menuItem}>
+                        <li key={item.id} onClick={() => handleMenuItemClick(item.path)} className={style.menuItem}>
                             {item.label}
                         </li>
                     ))}

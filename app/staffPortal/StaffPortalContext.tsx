@@ -9,6 +9,12 @@ import {
 } from "react";
 
 interface StaffPortalContextType {
+  // Authentication
+  accessToken: string | null;
+  setAccessToken: (token: string | null) => void;
+  isAuthenticated: boolean;
+  isAuthLoading: boolean;
+
   // Desktop sidebar
   sidebarExpanded: boolean;
   setSidebarExpanded: (expanded: boolean) => void;
@@ -19,6 +25,7 @@ interface StaffPortalContextType {
   setMobileSidebarOpen: (open: boolean) => void;
   toggleMobileSidebar: () => void;
 }
+
 
 const StaffPortalContext = createContext<
   StaffPortalContextType | undefined
@@ -48,6 +55,37 @@ export function StaffPortalProvider({
   });
 
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [isAuthLoading, setIsAuthLoading] = useState(true);
+
+  useEffect(() => {
+    async function restoreSession() {
+      try {
+        const response = await fetch(
+          "http://localhost:3001/authentication/refresh",
+          {
+            method: "POST",
+            credentials: "include",
+          }
+        );
+
+        if (!response.ok) {
+          setAccessToken(null);
+          return;
+        }
+
+        const result = await response.json();
+
+        setAccessToken(result.data.accessToken);
+      } catch (error) {
+        setAccessToken(null);
+      } finally {
+        setIsAuthLoading(false);
+      }
+    }
+
+    restoreSession();
+  }, []);
 
   useEffect(() => {
     window.localStorage.setItem(
@@ -64,9 +102,15 @@ export function StaffPortalProvider({
     setMobileSidebarOpen((prev) => !prev);
   };
 
+
   return (
     <StaffPortalContext.Provider
       value={{
+        accessToken,
+        setAccessToken,
+        isAuthenticated: accessToken !== null,
+        isAuthLoading,
+
         // Desktop
         sidebarExpanded,
         setSidebarExpanded,
