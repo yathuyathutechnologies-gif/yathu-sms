@@ -4,6 +4,7 @@
 
     display: flex;
     overflow: hidden;
+    color: black;
 }
 
 /* Main area scrolls */

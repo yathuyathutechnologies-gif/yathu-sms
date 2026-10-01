@@ -16,8 +16,8 @@ html {
 :root {
   --primary-color: #ffffff;
   --secondary-color: #087bce;
-  --accent-color: #ff642b;
-  --accent-hover: #e95620;
+  --accent-color: orangered;
+  --accent-hover: orangered;
   --text-color: #062e51;
   --muted-color: #61758a;
   --border-color: #d5dfe7;
@@ -40,8 +40,8 @@ html {
 .dark {
   --primary-color: #071b2d;
   --secondary-color: #86c9f1;
-  --accent-color: #ff7542;
-  --accent-hover: #ff8b62;
+  --accent-color:orangered;
+  --accent-hover: orangered;
   --text-color: #edf7fd;
   --muted-color: #a9bdca;
   --border-color: #24435a;
