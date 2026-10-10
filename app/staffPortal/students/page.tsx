@@ -13,17 +13,58 @@ const Student = () => {
     return (
         <div className={styles.container}>
 
-           <div className={styles.pathAndIcon}>
-            <div className={styles.iconPath}>
-                <StudentIcon/>
+            <div className={styles.pathAndIcon}>
+                <div className={styles.iconPath}>
+                    <StudentIcon />
+                </div>
+                <div className={styles.path}>
+                    {path}
+                </div>
             </div>
-             <div className={styles.path}>
-                {path}
-            </div>
-           </div>
 
             <div className={styles.tableContainer}>
-                <TableDisplay />
+                <TableDisplay tableTitle={[
+                    { title: "Id", key: "id" },
+                    { title: "First name", key: "firstName" },
+                    { title: "Last Name", key: "lastName" },
+                    { title: "Program", key: "program" },
+                    { title: "Year", key: "year" },
+                    { title: "Sex", key: "sex" }
+                ]}
+                    dataUrl='/students/students-information'
+                    filterOptions={[
+                        {
+                            value: "sex",
+                            text: "Sex"
+                        }, {
+                            value: "program",
+                            text: "Program"
+                        }, {
+                            value: "academicYear",
+                            text: "Academic year"
+                        },
+                        {
+                            value: "firstName",
+                            text: "First name"
+                        },
+                    ]}
+                    sortOptions={[
+                        {
+                            value: "firstName",
+                            text: "First name"
+                        },
+                        {
+                            value: "sex",
+                            text: "Sex"
+                        }, {
+                            value: "program",
+                            text: "Program"
+                        }, {
+                            value: "academiYear",
+                            text: "Academic year"
+                        },
+                    ]}
+                />
             </div>
 
         </div>

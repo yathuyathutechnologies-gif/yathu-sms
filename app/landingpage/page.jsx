@@ -75,13 +75,13 @@ const LandingPage = () => {
 
                     L 34 14
                     Q 34 10, 38 10
-
                     Z
                   "
                   />
                 </clipPath>
               </defs>
-            </svg><div className={styles.heroPath}>
+            </svg>
+            <div className={styles.heroPath}>
               <Image
                 src="/students.jpg"
                 alt="Hero"
@@ -89,6 +89,7 @@ const LandingPage = () => {
                 priority
                 style={{ objectFit: "cover" }}
                 quality={100}
+                sizes="60vw"
               />
             </div>
 
@@ -144,7 +145,8 @@ const LandingPage = () => {
                   />
                 </clipPath>
               </defs>
-            </svg><div className={styles.tabletHeroPath}>
+            </svg>
+            <div className={styles.tabletHeroPath}>
               <Image
                 src="/students.jpg"
                 alt="Hero"
@@ -152,6 +154,7 @@ const LandingPage = () => {
                 priority
                 style={{ objectFit: "cover" }}
                 quality={100}
+                sizes="70vw"
               />
             </div>
 
@@ -182,9 +185,9 @@ const LandingPage = () => {
                   <path
                     transform="scale(0.01 0.0142857)"
                     d="
-                      M 10 10
-                      L 90 10
-                      Q 98 10, 98 12
+                      M 10 6
+                      L 90 6
+                      Q 98 6, 98 9
 
                       L 98 68
                       Q 98 70, 90 70
@@ -198,8 +201,8 @@ const LandingPage = () => {
                       L 10 63
                       Q 2 63, 2 61
 
-                      L 2 12
-                      Q 2 10, 10 10
+                      L 2 9
+                      Q 2 6, 10 6
 
                       Z
                     "
@@ -215,6 +218,7 @@ const LandingPage = () => {
                 priority
                 style={{ objectFit: "cover" }}
                 quality={100}
+                sizes="90vw"
               />
             </div>
 
@@ -304,6 +308,7 @@ const LandingPage = () => {
                 priority
                 style={{ objectFit: "cover" }}
                 quality={100}
+                sizes="190vw"
               />
             </div>
 

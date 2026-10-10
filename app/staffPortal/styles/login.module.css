@@ -263,7 +263,11 @@
 .loginButton:active {
     transform: scale(0.98);
 }
-
+.loginButton:disabled{
+    opacity: 0.75;
+    background-color: var(--disabled-color);
+    color: #666;
+}
 @media (max-width:900) {
     .schoolName {
         font-size: 30;

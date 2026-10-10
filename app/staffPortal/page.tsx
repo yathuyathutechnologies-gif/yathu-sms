@@ -1,16 +1,42 @@
 "use client";
-import { memo, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import styles from './styles/login.module.css';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { EyeClosed, EyeIcon } from 'lucide-react';
+import { setErrorMap } from 'zod';
+import { useStaffPortal } from './StaffPortalContext';
 
 const StaffLoginPage = () => {
+
+    const {setAccessToken}= useStaffPortal();
     const [showPassword, setShowPassword] = useState(false);
-    const [accessToken, setAccessToken] = useState(null);
+    // const [accessToken, setAccessToken] = useState(null);
+    const [canSubmit, setCanSubmit] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState("");
+
+    
+    useEffect(() => {
+        const checkEmail = () => {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
+        };
+
+        const checkPassword = () => {
+            return (
+                password.length >= 8
+            );
+        };
+
+        const emailValid = checkEmail();
+        const passwordValid = checkPassword();
+
+        setCanSubmit(emailValid && passwordValid);
+    }, [email, password]);
 
     const router = useRouter()
-    const login = async (e) => {
+    const login = async (e: any) => {
         e.preventDefault();
         e.stopPropagation();
         const formData = new FormData(e.currentTarget)
@@ -35,11 +61,23 @@ const StaffLoginPage = () => {
         if (responseStatus === 201) {
             const accessToken = result.data.accessToken;
             setAccessToken(accessToken);
+            const roles: string[] = result.data.roles;
+            if (roles.find((role) => role == 'lecturer') == 'lecturer') {
+                console.log('good')
 
-            router.push("/staffPortal/dashBoard");
+                router.push("/staffPortal/dashBoard");
+                return
+            }
+            console.log('not good');
+
         } else {
+            handleError("hi")
         }
+
     };
+    const handleError = (message: string) => {
+        setError(message);
+    }
     return (
         <div className={styles.container}>
             {/* background image */}
@@ -124,7 +162,9 @@ const StaffLoginPage = () => {
                                     type="email"
                                     id="email"
                                     name="email"
-                                    placeholder=" "
+                                    placeholder=""
+                                    value={email}
+                                    onChange={(e) => { setEmail(e.target.value) }}
                                 />
                                 <label htmlFor="email">Email</label>
                             </div>
@@ -133,7 +173,9 @@ const StaffLoginPage = () => {
                                     type={showPassword ? "text" : "password"}
                                     id="password"
                                     name="password"
-                                    placeholder=" "
+                                    placeholder=""
+                                    value={password}
+                                    onChange={(e) => { setPassword(e.target.value) }}
                                 />
 
                                 <label htmlFor="password">Password</label>
@@ -154,6 +196,7 @@ const StaffLoginPage = () => {
                             <button
                                 type="submit"
                                 className={styles.loginButton}
+                                disabled={!canSubmit == true}
                             >
                                 Sign In
                             </button>

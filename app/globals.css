@@ -15,7 +15,7 @@ html {
 }
 :root {
   --primary-color: #ffffff;
-  --secondary-color: #087bce;
+  --secondary-color: #035086;
   --accent-color: orangered;
   --accent-hover: orangered;
   --text-color: #062e51;
@@ -26,6 +26,7 @@ html {
   --error-color: #d70022;
   --success-color: #11b96f;
   --warning-color: #f6bd55;
+  --shade-color:#022b4907;
 
   --ink: var(--text-color);
   --muted: var(--muted-color);
@@ -1071,4 +1072,33 @@ button {
 .dark .muted,
 .dark .setting span {
   color: var(--muted-color);
+}
+
+
+
+
+
+
+/* Chrome, Edge, Safari */
+html::-webkit-scrollbar {
+    width: 8px;
+}
+
+html::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+html::-webkit-scrollbar-thumb {
+    background: #b0b0b0;
+    border-radius: 10px;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
+
+/* Firefox */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #b0b0b0 #f1f1f1;
 }

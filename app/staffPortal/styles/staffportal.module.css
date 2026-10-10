@@ -1,46 +1,69 @@
+
 .staffPortal {
     width: 100%;
-    height: 100vh;
-
+    min-height: 100vh;
     display: flex;
-    overflow: hidden;
-    color: black;
+    color: #333333;
+    overflow: visible;
 }
 
-/* Main area scrolls */
 .content {
     flex: 1;
     min-width: 0;
-    height: 100vh;
-
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    /* Hide scrollbar */
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    min-height: 100vh;
+    overflow: visible;
+    
 }
-.content>:nth-child(2){
+
+.content > :nth-child(2) {
     margin-top: 60px;
     padding-top: 10px;
 }
 
-.content::-webkit-scrollbar {
-    display: none;
-}
-
-/* Page */
 .container {
     width: 100%;
     min-height: 100%;
-
     background-color: pink;
 }
 
-/* Actual content */
 .mainContainer {
     width: 100%;
     min-height: 150vh;
-
     background-color: aquamarine;
 }
+
+.actionExpanded {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(19, 19, 19, 0.1);
+    width: 100%;
+    height: 100vh;
+    z-index: 200;
+    backdrop-filter: blur(3px);
+    display: none;
+}
+
+.closeActions {
+    position: absolute;
+    right: 50px;
+    top: 20px;
+}
+
+.closeIcon {
+    width: 50px;
+    height: 50px;
+    color: var(--primary-color);
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    .closeActions {
+        right: 20px;
+    }
+
+    .closeIcon {
+        width: 32px;
+        height: 32px;
+    }
+}
+

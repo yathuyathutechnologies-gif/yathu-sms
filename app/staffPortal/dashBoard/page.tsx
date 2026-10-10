@@ -24,9 +24,9 @@ const visualCardList: VisualCardInterface[] = [
     },
     {
         id: '2',
-        title: "Users",
-        quantity: 50,
-        color: "#4EE1E6",
+        title: "My courses",
+        quantity: 5,
+        color: "#149a9e",
         icon: StudentIcon,
     },
     {

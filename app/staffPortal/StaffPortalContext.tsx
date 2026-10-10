@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import {
   createContext,
   useContext,
@@ -14,6 +15,7 @@ interface StaffPortalContextType {
   setAccessToken: (token: string | null) => void;
   isAuthenticated: boolean;
   isAuthLoading: boolean;
+  logout: () => void;
 
   // Desktop sidebar
   sidebarExpanded: boolean;
@@ -24,8 +26,12 @@ interface StaffPortalContextType {
   mobileSidebarOpen: boolean;
   setMobileSidebarOpen: (open: boolean) => void;
   toggleMobileSidebar: () => void;
-}
 
+  // more action blur layer
+  actionToogleOpen: boolean;
+  setActionToogleOpen: (open: boolean) => void;
+  toggleActions: () => void;
+}
 
 const StaffPortalContext = createContext<
   StaffPortalContextType | undefined
@@ -36,28 +42,33 @@ export function StaffPortalProvider({
 }: {
   children: ReactNode;
 }) {
+  const route = useRouter();
+
   const [sidebarExpanded, setSidebarExpanded] = useState<boolean>(() => {
-    // localStorage doesn't exist during server rendering.
     if (typeof window === "undefined") {
       return true;
     }
 
     const saved = window.localStorage.getItem("sidebarExpanded");
 
-
-    // No saved preference → expanded by default.
     if (saved === null) {
       return true;
     }
 
-    // Restore saved preference.
     return saved === "true";
   });
 
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
   const [accessToken, setAccessToken] = useState<string | null>(null);
   const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [actionToogleOpen, setActionToogleOpen] = useState(false);
 
+  const toggleActions = () => {
+    setActionToogleOpen((prev) => !prev);
+  };
+
+
+  // Restore the user's session when the application starts.
   useEffect(() => {
     async function restoreSession() {
       try {
@@ -71,13 +82,24 @@ export function StaffPortalProvider({
 
         if (!response.ok) {
           setAccessToken(null);
+
+          route.push("/staffPortal");
           return;
         }
 
         const result = await response.json();
 
-        setAccessToken(result.data.accessToken);
+        const newAccessToken = result?.data?.accessToken;
+
+        if (!newAccessToken) {
+          setAccessToken(null);
+          return;
+        }
+
+        setAccessToken(newAccessToken);
       } catch (error) {
+        console.error("Failed to restore session:", error);
+
         setAccessToken(null);
       } finally {
         setIsAuthLoading(false);
@@ -87,6 +109,8 @@ export function StaffPortalProvider({
     restoreSession();
   }, []);
 
+
+  //  Persist sidebar preference
   useEffect(() => {
     window.localStorage.setItem(
       "sidebarExpanded",
@@ -103,13 +127,36 @@ export function StaffPortalProvider({
   };
 
 
+  //  Logout. 
+  //  The backend should invalidate the refresh token
+  //  and clear the HttpOnly cookie.
+  const logout = async () => {
+    try {
+      await fetch(
+        "http://localhost:3001/authentication/logout",
+        {
+          method: "POST",
+          credentials: "include",
+        }
+      );
+    } catch (error) {
+      console.error("Logout request failed:", error);
+    } finally {
+      setAccessToken(null);
+
+      route.push("/staffPortal");
+    }
+  };
+
   return (
     <StaffPortalContext.Provider
       value={{
+        // Authentication
         accessToken,
         setAccessToken,
         isAuthenticated: accessToken !== null,
         isAuthLoading,
+        logout,
 
         // Desktop
         sidebarExpanded,
@@ -120,6 +167,11 @@ export function StaffPortalProvider({
         mobileSidebarOpen,
         setMobileSidebarOpen,
         toggleMobileSidebar,
+
+        // actionToogle
+        actionToogleOpen,
+        setActionToogleOpen,
+        toggleActions
       }}
     >
       {children}

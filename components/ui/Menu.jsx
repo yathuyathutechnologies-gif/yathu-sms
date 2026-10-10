@@ -203,14 +203,14 @@ export default function Menu({ MenuClosingRef, orangeTechRef }) {
             </div>
 
             <div className={style.menuContainer} ref={menuContainerRef}>
-                <div className={`${style.menu} menu`} ref={menuRef}>
+                <button className={`${style.menu} menu`} ref={menuRef}>
                     Menu
-                </div>
+                </button>
 
                 <ul className={style.menuItems} ref={menuItemsRef}>
-                    <div className={style.closeMenu} ref={closeMenuRef}>
+                    <button className={style.closeMenu} ref={closeMenuRef}>
                         close
-                    </div>
+                    </button>
                     {menuItems.map((item) => (
                         <li key={item.id} onClick={() => handleMenuItemClick(item.path)} className={style.menuItem}>
                             {item.label}

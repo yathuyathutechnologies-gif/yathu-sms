@@ -88,7 +88,7 @@ const StaffSideBarMenu = () => {
                     .to(toggleRef.current, {
                         x: '-18px',
                         ease: 'power1.in'
-                    })
+                    },'<')
                     .to(brandRef.current, {
                         opacity: 0,
                         ease: 'power1.in'
@@ -97,7 +97,7 @@ const StaffSideBarMenu = () => {
                     .to(sideBarMenuRef.current, {
                         width: '60px',
                         ease: 'power1.in'
-                    })
+                    },'<')
             }
             else {
                 tl
@@ -108,11 +108,11 @@ const StaffSideBarMenu = () => {
                     .to(toggleRef.current, {
                         x: 0,
                         ease: 'power1.in'
-                    })
+                    },'<')
                     .to(brandRef.current, {
                         x: 0,
                         ease: 'power1.in'
-                    })
+                    },'<')
                     .to(brandRef.current, {
                         opacity: 1,
                         ease: 'power1.in'
@@ -251,9 +251,6 @@ const StaffSideBarMenu = () => {
 
         const tl = gsap.timeline();
 
-        /*
-         * Reset previous active item
-         */
         if (previousItem && previousItem !== activeItem) {
             const previousTitle = previousItem.children[0];
 
@@ -287,9 +284,6 @@ const StaffSideBarMenu = () => {
             }
         }
 
-        /*
-         * Move active indicator
-         */
         tl.to(
             solidNavLeftBarRef.current,
             {
@@ -302,9 +296,6 @@ const StaffSideBarMenu = () => {
             previousItem ? ">" : "<"
         );
 
-        /*
-         * Animate new active item
-         */
         tl.to(
             activeItem,
             {

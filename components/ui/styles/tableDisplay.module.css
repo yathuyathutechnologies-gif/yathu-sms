@@ -1,12 +1,13 @@
 .container {
     position: relative;
     min-width: 100%;
-    min-height: 20vh;
+    min-height: 100vh;
     margin-top: 40px;
     overflow-x: auto;
     overflow-y: hidden;
     scrollbar-width: none;
     -ms-overflow-style: none;
+    background-color: var(--primary-color);
 }
 
 .container table {
@@ -31,14 +32,17 @@
     transition: background-color 0.2s ease-in;
 }
 
-.container td:hover {
+/* .container td:hover {
     background-color: rgba(255, 68, 0, 0.25);
     color: rgb(34, 34, 34);
+} */
+
+.container th {
+    background-color: var(--primary-color);
 }
 
-.container th,
-.container tr:nth-child(even) {
-    background-color: rgba(0, 0, 0, 0.075);
+.container tr:nth-child(odd) {
+    background-color: var(--shade-color);
 }
 
 
@@ -167,7 +171,7 @@
 }
 
 .mainMessage {
-    font-weight: bold;
+    font-weight: 400;
     font-size: 16px;
     display: flex;
     gap: 8px;
@@ -195,4 +199,287 @@
 
 .additionalInfo {
     height: 0;
+}
+
+.actionContainer {
+    position: relative;
+    width: 95%;
+    height: 40px;
+    padding: 0px 20px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 100;
+    margin-bottom: 20px;
+    background-color: var(--primary-color);
+}
+
+@media (max-width:768) {
+    .actionContainer {
+        padding: 0px 0px;
+    }
+}
+
+.actionContainer li {
+    margin: 0px 10px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in;
+}
+
+.actionContainer li:hover {
+    transform: translateY(-2px);
+}
+
+.searchContainer {
+    background-color: var(--shade-color);
+    height: 30px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    border-radius: 4px;
+    padding: 0px 10px 2px 0px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.searchText {
+    /* background-color: red; */
+    width: 180px;
+    position: relative;
+    height: 30px;
+    padding: 2px 10px 2px 5px;
+    outline: none;
+}
+
+
+.searchText:focus {
+    border: 1px solid #66666660;
+    border-radius: 4px 0px 0px 4px;
+}
+
+
+.filterCard {
+    position: fixed;
+    width: 500px;
+    height: 250px;
+    background-color: var(--primary-color);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    z-index: 201;
+    /* align-self: center; */
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-500px);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.filterButtons,
+.filterCard input,
+.filterCard select,
+.filterCard label {
+    width: 200px;
+}
+
+.filterCard select {
+    padding: 10px;
+    background-color: var(--primary-color);
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.filterCard input {
+    padding: 10px;
+    border: 1px solid #66666660;
+    border-radius: 6px;
+    outline: none;
+}
+
+.filterCard input:focus {
+    border: 1px solid #66666660;
+}
+
+.filterButtons {
+    height: 30px;
+    display: flex;
+    gap: 20px;
+    width: 250px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+@media (max-width:768) {
+    .filterCard {
+        width: 80vw;
+        height: 240px;
+        border-radius: 10px;
+        transform: translateX(-50%) translateY(-500px);
+        gap: 10px;
+    }
+
+    .filterButtons,
+    .filterCard input,
+    .filterCard select,
+    .filterCard label {
+        width: 220px;
+    }
+
+    .filterButtons {
+        width: 200px;
+        font-size: 12px;
+    }
+}
+
+.filterButtons button {
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 140px;
+    transition: transform 0.2s cubic-bezier(1, 0, 0, 1);
+}
+
+.filterButtons button:hover {
+    transform: translateY(-2px);
+}
+
+.clearButton {
+    background-color: transparent;
+    border: 1px solid #ccc !important;
+    color: var(--text-color);
+}
+
+.clearButton:hover {
+    transform: scale(2);
+}
+
+.submitButton {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.submitButton:hover:not(:disabled) {
+    opacity: 0.85;
+}
+
+.submitButton:disabled {
+    opacity: 0.5;
+    transform: none;
+}
+
+
+
+.sortCard {
+    position: fixed;
+    width: 500px;
+    height: 250px;
+    background-color: var(--primary-color);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    z-index: 201;
+    /* align-self: center; */
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-500px);
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.sortButtons,
+.sortCard input,
+.sortCard select,
+.sortCard label {
+    width: 200px;
+}
+
+.sortCard select {
+    padding: 10px;
+    background-color: var(--primary-color);
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.sortCard input {
+    padding: 10px;
+    border: 1px solid #66666660;
+    border-radius: 6px;
+    outline: none;
+}
+
+.sortCard input:focus {
+    border: 1px solid #66666660;
+}
+
+.sortButtons {
+    height: 30px;
+    display: flex;
+    gap: 20px;
+    width: 250px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+@media (max-width:768) {
+    .sortCard {
+        width: 80vw;
+        height: 240px;
+        border-radius: 10px;
+        transform: translateX(-50%) translateY(-500px);
+        gap: 10px;
+    }
+
+    .sortButtons,
+    .sortCard input,
+    .sortCard select,
+    .sortCard label {
+        width: 220px;
+    }
+
+    .sortButtons {
+        width: 200px;
+        font-size: 12px;
+    }
+}
+
+.sortButtons button {
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 140px;
+    transition: transform 0.2s cubic-bezier(1, 0, 0, 1);
+}
+
+.sortButtons button:hover {
+    transform: translateY(-2px);
 }

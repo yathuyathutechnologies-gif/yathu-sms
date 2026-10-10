@@ -4,6 +4,9 @@ import styles from "./styles/staffportal.module.css";
 import { usePathname } from "next/navigation";
 import StaffTopAppBar from "@/components/ui/staffTopAppBar";
 import { StaffPortalProvider } from "./StaffPortalContext";
+import { X } from "lucide-react";
+import ActionScreen from "./actionsScreen";
+import StaffPortalLayoutContent from "./staffPortalLayoutContent";
 
 export default function StaffPortalLayout({
     children,
@@ -11,18 +14,11 @@ export default function StaffPortalLayout({
     children: React.ReactNode;
 }) {
 
-    const pathname = usePathname();
-
-    const isLoginPage = pathname === "/staffPortal";
     return (
         <StaffPortalProvider>
-        <div className={styles.staffPortal}>
-            {!isLoginPage && <StaffSideBarMenu />}
-            <main className={styles.content}>
-                {!isLoginPage && <StaffTopAppBar />}
+            <StaffPortalLayoutContent>
                 {children}
-            </main>
-        </div>
+            </StaffPortalLayoutContent>
         </StaffPortalProvider>
     );
 }

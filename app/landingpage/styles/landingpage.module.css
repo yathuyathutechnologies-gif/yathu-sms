@@ -11,7 +11,7 @@
 
 .callToAction {
     position: absolute;
-    background-color: orangered;
+    background-color: var(--accent-color);
     color: white;
     padding: 12px 25px;
     border-radius: 50px;
@@ -19,7 +19,6 @@
     font-weight: 600;
     bottom: 100px;
     left: 40px;
-
     transition: background-color 0.5s ease, transform 0.4s ease;
     ;
 }
@@ -27,7 +26,7 @@
 .callToAction:hover {
     transform: translateY(-5px);
     cursor: pointer;
-    background-color: orange;
+    background-color: var(--accent-hover);
 }
 
 /* DESKTOP */
@@ -57,7 +56,7 @@
 }
 
 .achievement {
-    color: orangered;
+    color: var(--accent-color);
     margin-left: 20px;
 }
 
@@ -119,9 +118,6 @@
         width: 300px;
     }
 
-    .callToAction {
-        bottom: 70px;
-    }
 }
 
 
@@ -131,63 +127,7 @@
     display: none;
 }
 
-@media (max-width: 900px) and (min-width: 450px) {
 
-    .deskTopHeroSection {
-        display: none;
-    }
-
-    .tabletTopHeroSection {
-        display: block;
-    }
-
-    .tabletHeroPhotoContainer {
-        position: relative;
-        width: 100vw;
-        height: 90vh;
-    }
-
-    .tabletHeroPath {
-        position: relative;
-        width: 100%;
-        height: 100%;
-
-        clip-path: url(#tabletHeroClip);
-    }
-
-    .callToAction {
-        bottom: 60px;
-        left: 20px;
-    }
-
-
-    .tabletHeroText {
-        width: 70vw;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: end;
-        padding: 20px 15px;
-        position: absolute;
-        z-index: 20;
-        padding-bottom: 150px;
-        color: #fff;
-        padding-left: 30px;
-    }
-
-    .mobileheader {
-        font-weight: 600;
-        text-transform: uppercase;
-        line-height: 42px;
-        font-size: 42px;
-    }
-
-
-    .achievement {
-        color: orangered;
-        margin-left: 0px;
-    }
-}
 
 
 /* MOBILE */
@@ -196,74 +136,7 @@
     display: none;
 }
 
-@media (max-width: 450px) {
 
-    .deskTopHeroSection {
-        display: none;
-    }
-
-    .tabletTopHeroSection {
-        display: none;
-    }
-
-    .mobileTopHeroSection {
-        display: block;
-    }
-
-    .mobileHeroPhotoContainer {
-        position: relative;
-        width: 100vw;
-        height: 90vh;
-    }
-
-    .mobileHeroPath {
-        position: relative;
-        width: 100%;
-        height: 100%;
-
-        clip-path: url(#mobileHeroClip);
-    }
-
-    .callToAction {
-        bottom: 58px;
-        left: 8px;
-        font-size: 12px;
-        padding: 5px 10px;
-        min-height: 40px;
-        min-width: 110px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        border-radius: 20px;
-    }
-
-    .mobileHeroText {
-        width: 70vw;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: end;
-        padding: 20px 15px;
-        position: absolute;
-        z-index: 20;
-        padding-bottom: 150px;
-        color: #fff;
-    }
-
-    .mobileheader {
-        font-weight: 600;
-        text-transform: uppercase;
-        line-height: 24px;
-        font-size: 24px;
-    }
-
-
-
-    .achievement {
-        color: orangered;
-        margin-left: 0px;
-    }
-}
 
 
 
@@ -284,6 +157,7 @@
 .photoSide {
     position: relative;
     width: 45vw;
+    height: 65vh;
 }
 
 .mainGoalPhotoContainer {
@@ -312,7 +186,7 @@
 
     clip-path: url(#goalOrangeClip);
 
-    background-color: orangered;
+    background-color: var(--accent-color);
     display: flex;
     align-items: end;
     justify-content: end;
@@ -320,7 +194,8 @@
 
 .goalImageText {
     position: absolute;
-    right: 10px;
+    right: 20px;
+    bottom: -18px;
     width: 150px;
     height: 150px;
     display: flex;
@@ -331,7 +206,8 @@
 
 @media (max-width: 900px) and (min-width: 450px) {
     .goalImageText {
-        right: 50px;
+        right: 80px;
+        bottom: 35px;
     }
 }
 
@@ -373,17 +249,19 @@
     .mainGoalSection {
         width: 100%;
         height: auto;
-        min-height: 100vh;
+        min-height: 150vh;
         padding: 0 5px 5px;
         display: flex;
-        flex-direction: column;
+        flex-direction: column-reverse;
         justify-content: flex-start;
+        justify-content:space-around;
+        align-items: center;
     }
 
     .photoSide {
         position: relative;
         width: 100%;
-        height: 45vh;
+        height: 70svh;
         flex-shrink: 0;
     }
 
@@ -395,7 +273,7 @@
     .goalImageText {
         width: 85px;
         height: 100px;
-        padding: 15px 2px 0 10px
+        padding: 15px 2px 0px 10px
     }
 
     .goalImageText> :nth-child(1) {
@@ -418,5 +296,163 @@
         width: 100%;
         min-width: 0;
         font-size: 16px;
+    }
+}
+
+.tabletHeroPath {
+    position: relative;
+    width: 100%;
+    height: 100%;
+
+    clip-path: url(#tabletHeroClip);
+}
+
+@media (max-width: 900px) and (min-width: 450px) {
+
+
+    .deskTopHeroSection {
+        display: none;
+    }
+
+    .tabletTopHeroSection {
+        display: block;
+    }
+
+    .heroSection {
+        height: 100svh;
+    }
+
+    .tabletHeroPhotoContainer {
+        position: relative;
+        width: 100vw;
+        height: 100svh;
+    }
+
+
+
+    .callToAction {
+        bottom: 5px;
+        left: 20px;
+        width: 25%;
+    }
+
+
+    .tabletHeroText {
+        width: 70vw;
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        padding: 20px 15px;
+        position: absolute;
+        z-index: 20;
+        padding-bottom: 150px;
+        color: #fff;
+        padding-left: 30px;
+    }
+
+    .mobileheader {
+        font-weight: 600;
+        text-transform: uppercase;
+        line-height: 42px;
+        font-size: 42px;
+    }
+
+
+    .achievement {
+        color: var(--accent-color);
+        margin-left: 0px;
+    }
+}
+
+.mobileHeroPath {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: block;
+    clip-path: url(#mobileHeroClip);
+}
+
+@media (max-width: 450px) {
+    .mainGoalSection {
+        width: 100%;
+        height: auto;
+        min-height: 120svh;
+        padding: 40px 15px 5px 15px;
+        display: flex;
+        flex-direction:column-reverse;
+    }
+
+    .photoSide {
+        position: relative;
+        width: 100%;
+        height: 45vh;
+        flex-shrink: 0;
+    }
+
+    .deskTopHeroSection {
+        display: none;
+    }
+
+    .tabletTopHeroSection {
+        display: none;
+    }
+
+    .mobileTopHeroSection {
+        display: block;
+    }
+
+    .mobileHeroPhotoContainer {
+        position: relative;
+        width: 100vw;
+        height: 90vh;
+    }
+
+
+
+    .heroSection {
+        height: 100svh;
+    }
+
+    .callToAction {
+        bottom: 30px;
+        left: 8px;
+        font-size: 16px;
+        padding: 5px 10px;
+        min-height: 40px;
+        min-width: 110px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 30px;
+        height: 50px;
+        width: 165px;
+    }
+
+    .mobileHeroText {
+        width: 70vw;
+        height: 100svh;
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        padding: 20px 15px;
+        position: absolute;
+        z-index: 20;
+        padding-bottom: 200px;
+        color: #fff;
+    }
+
+    .mobileheader {
+        font-weight: 600;
+        text-transform: uppercase;
+        line-height: 40px;
+        font-size: 34px;
+    }
+
+
+
+    .achievement {
+        color: var(--accent-color);
+        margin-left: 0px;
     }
 }
