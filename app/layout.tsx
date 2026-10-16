@@ -52,6 +52,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
           {/* <Toaster />
         </ThemeProvider> */}
+      
+
+    <Toaster position="top-right" richColors />
       </body>
     </html>
   );

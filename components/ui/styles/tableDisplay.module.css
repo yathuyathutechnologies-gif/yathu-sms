@@ -114,7 +114,7 @@
     width: 100%;
     display: flex;
     clip-path: url(#accordian);
-    background-color: white;
+    background-color: var(--primary-color);
     width: 100%;
     z-index: 1;
     overflow: visible;

@@ -6,18 +6,21 @@ import { useRouter } from 'next/navigation';
 import { EyeClosed, EyeIcon } from 'lucide-react';
 import { setErrorMap } from 'zod';
 import { useStaffPortal } from './StaffPortalContext';
+import { Spinner } from '@/components/ui/spinner';
+import { toast } from 'sonner';
+import { truncate } from '@/components/functions/truncate';
 
 const StaffLoginPage = () => {
 
-    const {setAccessToken}= useStaffPortal();
+    const { setAccessToken, setRoles, setPermissions, setUser, setTitle } = useStaffPortal();
     const [showPassword, setShowPassword] = useState(false);
     // const [accessToken, setAccessToken] = useState(null);
     const [canSubmit, setCanSubmit] = useState(false);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
-
-    
+    const [loading, setIsLoading] = useState(false);
+    // const [showError, setShowError] = useState(true);
     useEffect(() => {
         const checkEmail = () => {
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
@@ -39,58 +42,113 @@ const StaffLoginPage = () => {
     const login = async (e: any) => {
         e.preventDefault();
         e.stopPropagation();
+        setIsLoading(true);
         const formData = new FormData(e.currentTarget)
 
         const password = formData.get("password");
         const email = formData.get("email");
-        const response = await fetch("http://localhost:3001/authentication/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            credentials: 'include',
-            body: JSON.stringify({
-                email: email,
-                password: password,
-            }),
-        });
+        try {
+            const response = await fetch("http://localhost:3001/authentication/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                credentials: 'include',
+                body: JSON.stringify({
+                    email: email,
+                    password: password,
+                }),
+            });
 
-        const result = await response.json();
-        const responseStatus = response.status;
+            const result = await response.json();
+            const responseStatus = response.status;
 
-        if (responseStatus === 201) {
-            const accessToken = result.data.accessToken;
-            setAccessToken(accessToken);
-            const roles: string[] = result.data.roles;
-            if (roles.find((role) => role == 'lecturer') == 'lecturer') {
-                console.log('good')
+            if (responseStatus === 201) {
+                const accessToken = result.data.accessToken;
+                setAccessToken(accessToken);
+                const roles: string[] = result.data.roles;
+                const permissions: string[] = result.data.permissions;
+                const firstName = result.data.firstName;
+                const lastName = result.data.lastName;
 
-                router.push("/staffPortal/dashBoard");
-                return
+
+
+                if (roles.some((role) => ["lecturer", "admin"].includes(role))) {
+
+                    const title = roles.includes("admin")
+                        ? "Administrator"
+                        : roles.includes("lecturer")
+                            ? "Lecturer"
+                            : "Staff";
+                    setTitle(title);
+                    setRoles(roles);
+                    setPermissions(permissions);
+                    setUser({ firstName, lastName });
+                    router.push("/staffPortal/dashBoard");
+                    return;
+                }
+
+                else {
+                    handleError("You are not authorized to access the lecturer portal.");
+                    return;
+                }
+
+            } else {
+                handleError(result.message || "Login failed.");
+                return;
             }
-            console.log('not good');
-
-        } else {
-            handleError("hi")
         }
-
+        catch (error) {
+            handleError("Unable to connect to the server. Please try again.");
+        }
+        finally {
+            setIsLoading(false);
+        }
     };
     const handleError = (message: string) => {
         setError(message);
+        toast.error(`${truncate(message, 40)}`)
     }
+    // effect to show errors.
     return (
         <div className={styles.container}>
             {/* background image */}
             <div className={styles.backgroundContainer}>
                 <div className={styles.backgroundImageContainer}>
+                    <svg
+                        width="0"
+                        height="0"
+                        style={{ position: "absolute" }}
+                    >
+                        <defs>
+                            <clipPath
+                                id="backgroundClip"
+                                clipPathUnits="objectBoundingBox"
+                            >
+                                <path
+                                    transform="scale(0.01 0.0142857)"
+                                    d="
+                                        M 0 0
+                                        L 70 0
+                                        L 60 100
+                                        L 0 100
+                                        Z
+                                        "
+                                />
+                            </clipPath>
+                        </defs>
+                    </svg>
                     <Image
-                        src='/images/tool.jpg'
-                        alt='bgImage'
-                        quality={70}
-                        fill
+                        src="/images/tool.jpg"
+                        alt="Background"
+                        width={1200}
+                        height={800}
                         priority
-                        className={styles.bgImage}
+                        style={{
+                            objectFit: "cover",
+                        }}
                     />
+
                 </div>
             </div>
             <div className={styles.loginContainer}>
@@ -157,7 +215,7 @@ const StaffLoginPage = () => {
                     <div className={styles.formSection}>
 
                         <form className={styles.form} onSubmit={login}>
-                            <div className={styles.inputGroup}>
+                            <div className={styles.emailContainer}>
                                 <input
                                     type="email"
                                     id="email"
@@ -196,9 +254,14 @@ const StaffLoginPage = () => {
                             <button
                                 type="submit"
                                 className={styles.loginButton}
-                                disabled={!canSubmit == true}
+                                disabled={!canSubmit || loading}
                             >
-                                Sign In
+                                {!loading ? (<span>
+                                    Sign In
+                                </span>) :
+                                    (
+                                        <Spinner />
+                                    )}
                             </button>
                         </form>
                     </div>

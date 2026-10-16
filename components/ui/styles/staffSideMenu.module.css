@@ -1,5 +1,5 @@
 .menuSideBar {
-    
+
     z-index: 100;
     width: 20vw;
     height: 100vh;
@@ -42,7 +42,7 @@
     }
 
     .menuSideBar {
-        position: absolute;
+        position: fixed;
         width: 200px;
         left: 0px;
         top: 0px;
@@ -77,14 +77,15 @@
 
 .navItemContainer {
     position: relative;
-    height: 35px;
+    min-height: 35px;
     display: flex;
-    padding: 2px;
+    padding: 2px 2px 2px 10px;
     font-size: 16px;
     font-weight: 400;
     gap: 1px;
     cursor: pointer;
     transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+
 }
 
 .navItemContainer:hover {
@@ -98,11 +99,12 @@
     overflow: hidden;
     display: flex;
     align-items: center;
+    font-weight: 400;
 }
 
 .navIcon {
     height: 100%;
-    width: 24%;
+    width: 50px;
     overflow: hidden;
     display: flex;
     justify-content: center;
@@ -113,5 +115,65 @@
     transform: translateX(-4px);
     width: 4px;
     height: 34px;
-    background-color: var(--accent-color);
+    background-color: var(--accent-color) !important;
+}
+
+.subNavList {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    padding:0px 10px 0px 15px;
+}
+
+.subNavItemContainer {
+    width: 100%;
+    /* height: 20px; */
+    font-weight: 100;
+    position: relative;
+    min-height: 35px;
+    display: flex;
+    padding: 2px 2px 2px 5px;
+    font-size: 16px;
+    font-weight: 400;
+    gap: 1px;
+    cursor: pointer;
+    justify-content: space-between;
+    transition: transform 0.3s ease, opacity 0.3s ease, color 0.3s ease, opacity 0.3s ease;
+    border-left: 1px solid black;
+}
+
+.subNavItemContainer:hover {
+    transform: translateY(-2px);
+    color: var(--accent-hover)
+}
+
+.subNavTitle {
+    height: 100%;
+    width: 75%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    font-weight: 100;
+}
+
+.subNavIcon {
+    height: 90%;
+    width: 50px;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+}
+
+.subSolidNavLeftBar {
+    position: absolute;
+    transform: translateX(-4px);
+    width: 4px;
+    height: 34px;
+    background-color: var(--accent-color) !important;
+}
+
+.activeSubNavItem {
+    color: var(--accent-color);
+    /* border-bottom: 1px solid var(--accent-color); */
 }

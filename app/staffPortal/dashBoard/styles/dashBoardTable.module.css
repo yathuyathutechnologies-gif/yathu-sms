@@ -1,0 +1,371 @@
+.container {
+    position: relative;
+    width: 100%;
+    min-width: 0;
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    /* overflow-x: auto;
+    overflow-y: hidden;
+    box-sizing: border-box; */
+}
+
+.tableWrapper {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.tableWrapper::-webkit-scrollbar {
+    display: none;
+}
+
+.container table {
+    width: max-content;
+    min-width: 98%;
+    border-collapse: separate;
+    border-spacing: 0 10px;
+}
+
+.container th,
+.container td {
+    padding: 1px 5px;
+    text-align: left;
+    background-color: var(--shade-color);
+    font-weight: 12px;
+    font-weight: 300;
+}
+
+.container td:nth-child(1),
+.container td:nth-child(2) {
+    background-color: transparent;
+    border-bottom: none;
+}
+
+.container td:nth-child(3) {
+    border-radius: 10px 0px 0px 10px;
+    padding-left: 10px;
+}
+
+.container td:last-child {
+    border-radius: 0px 10px 10px 0px;
+}
+
+.container td,
+.container tr:nth-child(even),
+.container tr:nth-child(odd) {
+    transition: background-color 0.2s ease-in;
+}
+
+.container tr button {
+    color: #ccc;
+}
+
+/* .container td:hover {
+    background-color: rgba(255, 68, 0, 0.25);
+    color: rgb(34, 34, 34);
+} */
+
+.container th {
+    background-color: transparent;
+}
+
+/* .container tr:nth-child(odd) {
+    background-color: var(--shade-color);
+} */
+
+
+.actionContainer {
+    position: relative;
+    width: 98%;
+    height: 30px;
+    padding: 0px 20px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    font-size: 12px;
+    font-weight: 100;
+    margin-bottom: 10px;
+    background-color: var(--primary-color);
+}
+
+@media (max-width:768) {
+    .actionContainer {
+        padding: 0px;
+    }
+}
+
+.actionContainer li {
+    margin: 0px 5px;
+    cursor: pointer;
+    transition: transform 0.2s ease-in;
+}
+
+.actionContainer li:hover {
+    transform: translateY(-2px);
+}
+
+.searchContainer {
+    background-color: var(--shade-color);
+    height: 25px;
+    width: 200px;
+    display: flex;
+    align-items: center;
+    position: relative;
+    border-radius: 4px;
+    padding: 0px 5px 2px 0px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.searchText {
+    /* background-color: red; */
+    width: 180px;
+    position: relative;
+    height: 25px;
+    padding: 2px 5px 1px 5px;
+    outline: none;
+    /* border: 1px solid #66666660; */
+    border-radius: 4px 0px 0px 4px;
+    font-size: 16px;
+    font-weight: 200;
+}
+
+
+.searchText:focus {
+    border: 1px solid transparent;
+    border-radius: 4px 0px 0px 4px;
+}
+.searchText::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+.filterCard {
+    position: fixed;
+    width: 500px;
+    height: 250px;
+    background-color: var(--primary-color);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    z-index: 201;
+    /* align-self: center; */
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-500px);
+    display: none;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.filterButtons,
+.filterCard input,
+.filterCard select,
+.filterCard label {
+    width: 200px;
+}
+
+.filterCard select {
+    padding: 10px;
+    background-color: var(--primary-color);
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.filterCard input {
+    padding: 10px;
+    border: 1px solid #66666660;
+    border-radius: 6px;
+    outline: none;
+}
+
+.filterCard input:focus {
+    border: 1px solid #66666660;
+}
+
+.filterButtons {
+    height: 30px;
+    display: flex;
+    gap: 20px;
+    width: 250px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+@media (max-width:768) {
+    .filterCard {
+        width: 80vw;
+        height: 240px;
+        border-radius: 10px;
+        transform: translateX(-50%) translateY(-500px);
+        gap: 10px;
+    }
+
+    .filterButtons,
+    .filterCard input,
+    .filterCard select,
+    .filterCard label {
+        width: 220px;
+    }
+
+    .filterButtons {
+        width: 200px;
+        font-size: 12px;
+    }
+}
+
+.filterButtons button {
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 140px;
+    transition: transform 0.2s cubic-bezier(1, 0, 0, 1);
+}
+
+.filterButtons button:hover {
+    transform: translateY(-2px);
+}
+
+.clearButton {
+    background-color: transparent;
+    border: 1px solid #ccc !important;
+    color: var(--text-color);
+}
+
+.clearButton:hover {
+    transform: scale(2);
+}
+
+.submitButton {
+    background-color: var(--accent-color);
+    color: white;
+}
+
+.submitButton:hover:not(:disabled) {
+    opacity: 0.85;
+}
+
+.submitButton:disabled {
+    opacity: 0.5;
+    transform: none;
+}
+
+
+
+.sortCard {
+    position: fixed;
+    width: 500px;
+    height: 250px;
+    background-color: var(--primary-color);
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    z-index: 201;
+    /* align-self: center; */
+    top: 30%;
+    left: 50%;
+    transform: translateX(-50%) translateY(-500px);
+    display: none;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+
+.sortButtons,
+.sortCard input,
+.sortCard select,
+.sortCard label {
+    width: 200px;
+}
+
+.sortCard select {
+    padding: 10px;
+    background-color: var(--primary-color);
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 12px;
+}
+
+.sortCard input {
+    padding: 10px;
+    border: 1px solid #66666660;
+    border-radius: 6px;
+    outline: none;
+}
+
+.sortCard input:focus {
+    border: 1px solid #66666660;
+}
+
+.sortButtons {
+    height: 30px;
+    display: flex;
+    gap: 20px;
+    width: 250px;
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+@media (max-width:768) {
+    .sortCard {
+        width: 80vw;
+        height: 240px;
+        border-radius: 10px;
+        transform: translateX(-50%) translateY(-500px);
+        gap: 10px;
+    }
+
+    .sortButtons,
+    .sortCard input,
+    .sortCard select,
+    .sortCard label {
+        width: 220px;
+    }
+
+    .sortButtons {
+        width: 200px;
+        font-size: 12px;
+    }
+}
+
+.sortButtons button {
+    padding: 10px 20px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.2s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 140px;
+    transition: transform 0.2s cubic-bezier(1, 0, 0, 1);
+}
+
+.sortButtons button:hover {
+    transform: translateY(-2px);
+}

@@ -10,25 +10,18 @@ export function useApiFetch() {
         accessToken,
         setAccessToken,
         logout,
+        setRoles,
+        setPermissions,
+        setUser,
+        setTitle
     } = useStaffPortal();
-
-    /*
-     * Store the latest access token in a ref.
-     *
-     * Updating a ref does NOT cause a re-render.
-     */
     const accessTokenRef = useRef(accessToken);
-
-    /*
-     * Keep the ref synchronized with React state.
-     */
     useEffect(() => {
         accessTokenRef.current = accessToken;
     }, [accessToken]);
 
-    /*
-     * Refresh access token.
-     */
+    // this run when fecthing api fails
+    // In context, /refresh run on page mount. or on every refresh
     const refreshAccessToken = useCallback(async () => {
         try {
             const response = await fetch(
@@ -44,18 +37,30 @@ export function useApiFetch() {
             }
 
             const result = await response.json();
+            const data = result?.data;
 
-            const newAccessToken =
-                result?.data?.accessToken;
-
+            const newAccessToken = data?.accessToken;
             if (!newAccessToken) {
                 return null;
             }
 
-            setAccessToken(newAccessToken);
+            const roles: string[] = data.roles ?? [];
+            const permissions: string[] = data.permissions ?? [];
 
-            // Keep the ref immediately up to date.
-            accessTokenRef.current = newAccessToken;
+
+            if (roles.some((role) => ["lecturer", "admin"].includes(role))) {
+                const title = roles.includes("admin")
+                    ? "Administrator"
+                    : roles.includes("lecturer")
+                        ? "Lecturer"
+                        : "Staff";
+                setTitle(title);
+                setRoles(roles);
+                setPermissions(permissions);
+                setUser({ firstName: data.firstName, lastName: data.lastName });
+                return;
+            }
+
 
             return newAccessToken;
 
@@ -69,21 +74,15 @@ export function useApiFetch() {
         }
     }, [setAccessToken]);
 
-    /*
-     * apiFetch is now stable.
-     *
-     * It does NOT depend on accessToken.
-     */
+
     const apiFetch = useCallback(
         async (
             endpoint: string,
             options: RequestInit = {}
         ) => {
+
             const headers = new Headers(options.headers);
 
-            /*
-             * Always get the latest token from the ref.
-             */
             const token = accessTokenRef.current;
 
             if (token) {
@@ -103,9 +102,6 @@ export function useApiFetch() {
                 }
             }
 
-            /*
-             * Original request.
-             */
             let response = await fetch(
                 `${BaseUrl}${endpoint}`,
                 {
@@ -115,32 +111,18 @@ export function useApiFetch() {
                 }
             );
 
-            /*
-             * Request succeeded or failed
-             * for a non-authentication reason.
-             */
             if (response.status !== 401) {
+
                 return response;
             }
 
-            /*
-             * Token expired/invalid.
-             * Try refreshing.
-             */
-            const newAccessToken =
-                await refreshAccessToken();
+            const newAccessToken = await refreshAccessToken();
 
-            /*
-             * Refresh failed.
-             */
             if (!newAccessToken) {
                 await logout();
                 return response;
             }
 
-            /*
-             * Retry using the new token.
-             */
             const retryHeaders = new Headers(options.headers);
 
             retryHeaders.set(

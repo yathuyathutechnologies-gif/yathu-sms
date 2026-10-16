@@ -1,4 +1,3 @@
-
 .staffPortal {
     width: 100%;
     min-height: 100vh;
@@ -12,25 +11,26 @@
     min-width: 0;
     min-height: 100vh;
     overflow: visible;
-    
+    margin-left: 20vw;
 }
 
-.content > :nth-child(2) {
+.loginContent {
+    margin-left: 0;
+}
+
+@media (max-width:768) {
+    .content {
+        margin-left: 0px;
+        width: 100vw;
+    }
+}
+
+.content> :nth-child(2) {
     margin-top: 60px;
     padding-top: 10px;
 }
 
-.container {
-    width: 100%;
-    min-height: 100%;
-    background-color: pink;
-}
 
-.mainContainer {
-    width: 100%;
-    min-height: 150vh;
-    background-color: aquamarine;
-}
 
 .actionExpanded {
     position: fixed;
@@ -66,4 +66,3 @@
         height: 32px;
     }
 }
-

@@ -31,7 +31,7 @@ const Student = () => {
                     { title: "Year", key: "year" },
                     { title: "Sex", key: "sex" }
                 ]}
-                    dataUrl='/students/students-information'
+                    dataUrl='/students/lecturer-students-information'
                     filterOptions={[
                         {
                             value: "sex",
@@ -60,7 +60,7 @@ const Student = () => {
                             value: "program",
                             text: "Program"
                         }, {
-                            value: "academiYear",
+                            value: "academicYear",
                             text: "Academic year"
                         },
                     ]}

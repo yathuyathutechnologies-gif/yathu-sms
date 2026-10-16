@@ -1,15 +1,28 @@
-import * as React from "react";
-import { cn } from "@/lib/utils";
-export const Skeleton = React.forwardRef<
-  HTMLDivElement,
-  React.ComponentProps<"div">
->(({ className, ...props }, ref) => (
-  <div
-    ref={ref}
-    data-slot="skeleton"
-    aria-hidden="true"
-    className={cn("skeleton", className)}
-    {...props}
-  />
-));
-Skeleton.displayName = "Skeleton";
+
+import styles from "./styles/skeleton.module.css";
+
+interface SkeletonProps {
+  width?: string | number;
+  height?: string | number;
+  radius?: string | number;
+  className?: string;
+}
+
+export default function Skeleton({
+  width = "100%",
+  height = 16,
+  radius = 6,
+  className = "",
+}: SkeletonProps) {
+  return (
+    <div
+      aria-hidden="true"
+      className={`${styles.skeleton} ${className}`}
+      style={{
+        width,
+        height,
+        borderRadius: radius
+      }}
+    />
+  );
+}

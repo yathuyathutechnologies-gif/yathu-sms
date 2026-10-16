@@ -4,6 +4,7 @@
     justify-content: space-between;
 }
 
+
 .backgroundRec {
     position: absolute;
     opacity: 0.1;
@@ -11,8 +12,8 @@
 
 .container,
 .backgroundRec {
-    width: 200px;
-    height: 100px;
+    width: 250px;
+    height: 140px;
 }
 
 .leftBar {
@@ -26,7 +27,7 @@
 .details {
     width: 64%;
     position: relative;
-    padding: 20px 5px 4px 24px;
+    padding: 34px 5px 4px 24px;
     opacity: 1;
 }
 
@@ -52,8 +53,8 @@
 
     .container,
     .backgroundRec {
-        width: 120px;
-        height: 80px;
+        width: 150px;
+        height: 100px;
     }
 
     .details {

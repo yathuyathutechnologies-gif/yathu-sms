@@ -3,7 +3,7 @@ import { ComponentType, useLayoutEffect, useRef, useState } from 'react';
 import styles from './styles/staffSideMenu.module.css';
 import gsap from 'gsap';
 import { truncate } from '../functions/truncate';
-import { title } from 'process';
+import { permission, title } from 'process';
 import { Home, Icon, Sidebar } from 'lucide-react';
 import HomeIcon from '../icons/HomeIcon';
 import StudentIcon from '../icons/StudentIcon';
@@ -13,49 +13,84 @@ import AssignmentIcon from '../icons/assignementIcon';
 import ClassIcon from '../icons/classIcon';
 import LectureIcon from '../icons/LectureIcon';
 import ExamIcon from '../icons/ExamIcon';
+import Skeleton from './skeleton';
 interface navItem {
-    title: string,
-    icon: ComponentType<{ color?: string, size?: number }>,
-    navLink: string,
-    iconColor: string
+    title: string;
+    icon: ComponentType<{ color?: string, size?: number }>;
+    navLink?: string;
+    iconColor: string;
+    permissions: string[];
+    roles: string[];
+    subNavItems?: navItem[];
 }
 const navItems: navItem[] = [
     {
-        title: 'Home',
+        title: 'DashBoard',
         icon: HomeIcon,
         navLink: 'staffPortal/dashBoard',
-        iconColor: 'black'
+        iconColor: 'black',
+        permissions: [],
+        roles: ['admin', 'lecturer']
     },
     {
         title: 'Students',
         icon: StudentIcon,
-        navLink: 'staffPortal/students',
-        iconColor: 'black'
+        // navLink: 'staffPortal/students',
+        iconColor: 'black',
+        permissions: ['students.read'],
+        roles: ['lecturer', 'admin'],
+        subNavItems: [
+            {
+                title: 'My students',
+                icon: StudentIcon,
+                navLink: 'staffPortal/students/mystudents',
+                iconColor: 'black',
+                permissions: [],
+                roles: ['lecturer']
+            }, {
+                title: 'All students',
+                icon: StudentIcon,
+                navLink: 'staffPortal/students/allstudents',
+                iconColor: 'black',
+                permissions: [],
+                roles: ['admin']
+            },
+        ]
     },
     {
         title: 'Lectures',
         icon: LectureIcon,
-        navLink: 'staffPortal/students',
-        iconColor: 'black'
+        navLink: 'staffPortal/lecturers',
+        iconColor: 'black',
+        permissions: ['lecturers.read'],
+        roles: ['lecturer']
     },
     {
         title: 'Class',
         icon: ClassIcon,
         navLink: 'staffPortal/classes',
-        iconColor: 'black'
+        iconColor: 'black',
+        permissions: ['timetable.read'],
+        roles: ['lecturer']
     },
     {
         title: 'Assignment',
         icon: AssignmentIcon,
-        navLink: 'staffPortal/students',
-        iconColor: 'black'
-    },  {
+        // navLink: 'staffPortal/students',
+        iconColor: 'black',
+        permissions: [],
+        roles: ['lecturer']
+    }, {
         title: 'Exam',
         icon: ExamIcon,
-        navLink: 'staffPortal/students',
-        iconColor: 'black'
+        // navLink: 'staffPortal/students',
+        iconColor: 'black',
+        permissions: [],
+        roles: ['lecturer']
     }
 ];
+
+// to do: make filter the sub nav items. on permissions and roles
 const StaffSideBarMenu = () => {
     const route = useRouter();
     // use ref
@@ -67,57 +102,81 @@ const StaffSideBarMenu = () => {
     const solidNavLeftBarRef = useRef<HTMLDivElement | null>(null);
     const navItemRef = useRef<(HTMLLIElement | null)[]>([]);
     const previousActiveIndexRef = useRef<number>(-1);
-    //use states
-    // local storage
+    const [expadedNavItemIds, setExpandedNavItemIds] = useState<string[]>([])
+    const pathname = usePathname();
+
+    const handleNavItemExpand = (
+        isExpanded: boolean,
+        id: string
+    ) => {
+        setExpandedNavItemIds((previous) => {
+            return isExpanded
+                ? previous.filter((expandedId) => expandedId !== id)
+                : [...previous, id];
+        });
+    };
     const {
         sidebarExpanded,
         toggleSidebar,
         mobileSidebarOpen,
-        toggleMobileSidebar
+        toggleMobileSidebar,
+        hasPermission,
+        hasRole,
+        isAuthLoading
     } = useStaffPortal();
 
     useLayoutEffect(() => {
+
+        console.log(isAuthLoading, mobileSidebarOpen)
+        const brand = brandRef.current;
+        const toggle = toggleRef.current;
+        const sideBarMenu = sideBarMenuRef.current
         const mm = gsap.matchMedia();
+        if (isAuthLoading) {
+            return
+        }
+        if (!brand || !toggle || !sideBarMenu) {
+            return
+        }
         mm.add("(min-width: 769px)", () => {
             const tl = gsap.timeline({})
             if (!sidebarExpanded) {
-                tl.to(brandRef.current, {
+                tl.to(brand, {
                     x: '-100px',
                     ease: 'power1.in'
                 })
-                    .to(toggleRef.current, {
+                    .to(toggle, {
                         x: '-18px',
                         ease: 'power1.in'
-                    },'<')
-                    .to(brandRef.current, {
+                    }, '<')
+                    .to(brand, {
                         opacity: 0,
                         ease: 'power1.in'
                     }, '<')
 
-                    .to(sideBarMenuRef.current, {
+                    .to(sideBarMenu, {
                         width: '60px',
                         ease: 'power1.in'
-                    },'<')
+                    }, '<')
             }
             else {
                 tl
-                    .to(sideBarMenuRef.current, {
+                    .to(sideBarMenu, {
                         width: '20vw',
                         ease: 'power1.in'
                     })
-                    .to(toggleRef.current, {
+                    .to(toggle, {
                         x: 0,
                         ease: 'power1.in'
-                    },'<')
-                    .to(brandRef.current, {
+                    }, '<')
+                    .to(brand, {
                         x: 0,
                         ease: 'power1.in'
-                    },'<')
-                    .to(brandRef.current, {
+                    }, '<')
+                    .to(brand, {
                         opacity: 1,
                         ease: 'power1.in'
                     }, '<')
-
             }
             expandSideBarNavItems(sidebarExpanded);
         });
@@ -130,14 +189,14 @@ const StaffSideBarMenu = () => {
                 tl.to(sideBarMenuRef.current, {
                     x: -300,
                     ease: 'power1.in',
-                    duration: 0.5
+                    duration: 1.2
                 })
             }
             else {
                 tl.to(sideBarMenuRef.current, {
                     x: 0,
-                    ease: 'power1.out',
-                    duration: 1
+                    ease: 'power1.in',
+                    duration: 1.2
                 })
             }
         });
@@ -147,35 +206,41 @@ const StaffSideBarMenu = () => {
 
     const expandSideBarNavItems = (isExpanded: boolean) => {
         const tl = gsap.timeline({});
+        const navTitle = navItemRef.current;
+        const navIcon = navIconRef.current;
+
+        if (!navIcon || !navTitle) {
+            return
+        }
         if (!isExpanded) {
             tl
-                .to(navTitleRef.current, {
+                .to(navTitle, {
                     x: '-200px',
                     ease: 'power1.in'
                 })
-                .to(navIconRef.current, {
+                .to(navIcon, {
                     // x: '-10px',
                     width: '90px',
                     padding: '0px',
                     gap: '0px',
                     ease: 'power1.in'
                 })
-                .to(navTitleRef.current, {
+                .to(navTitle, {
                     opacity: 0,
                     ease: 'power1.in'
                 }, '<')
         }
         else {
             tl
-                .to(navTitleRef.current, {
+                .to(navTitle, {
                     opacity: 1,
                     ease: 'power1.in'
                 }, '<')
-                .to(navIconRef.current, {
+                .to(navIcon, {
                     x: 0,
                     ease: 'power1.in'
                 }, '<')
-                .to(navTitleRef.current, {
+                .to(navTitle, {
                     x: 0,
                     ease: 'power1.in'
                 })
@@ -193,48 +258,118 @@ const StaffSideBarMenu = () => {
             toggleMobileSidebar();
         });
     }
-    const navList = navItems.map((item, index) => {
+    const visibleNavItems = navItems.filter((item) => {
+        const requiredRole = item.roles.some((role) => hasRole(role));
+        const requiredPermission = item.permissions.some((permission) => hasPermission(permission))
+        // console.log(requiredRole || requiredPermission)
+        return requiredRole || requiredPermission;
+    });
+
+
+    const navList = visibleNavItems.map((item, index) => {
+        const isExpanded = expadedNavItemIds.includes(item.title);
+        const visibleSubNavItems = item.subNavItems?.filter((item) => {
+            const requiredRole = item.roles.some((role) => hasRole(role));
+            const requiredPermission = item.permissions.some((permission) => hasPermission(permission))
+            // console.log(requiredRole || requiredPermission)
+            return requiredRole || requiredPermission;
+        });
+        // sub items
+        const subNavList = visibleSubNavItems?.map((subItem, subIndex) => {
+            const isSubNavActive =
+                pathname === `/${subItem.navLink}`;
+            const Icon = subItem.icon
+            return (
+                <li className={`${styles.subNavItemContainer} ${isSubNavActive ? styles.activeSubNavItem : ""
+                    }`}
+                    key={subIndex}
+                    onClick={() => {
+                        if (subItem.navLink == "" || !subItem.navLink) {
+                            // expand sub navs
+                            return
+                        }
+                        handleNavItemClick(subItem.navLink);
+                    }}
+                >
+                    <div className={styles.subNavTitle}
+                    // ref={(element) => {
+                    //     navTitleRef.current[index] = element;
+                    // }}
+                    >
+                        {truncate(subItem.title, 15)}
+                    </div>
+                    <div className={styles.subNavIcon}
+                    //  ref={(element) => {
+                    //     navIconRef.current[index] = element;
+                    // }}
+                    >
+                        <Icon />
+                    </div>
+                </li>
+            );
+        });
         const Icon = item.icon
         return (
-            <li key={index} className={styles.navItemContainer} onClick={() => {
-                handleNavItemClick(item.navLink);
-            }}
+            <li key={index}
                 ref={(element) => {
                     navItemRef.current[index] = element;
                 }}>
-                <div className={styles.navTitle} ref={(element) => {
-                    navTitleRef.current[index] = element;
-                }}>
-                    {truncate(item.title, 10)}
+                <div className={styles.navItemContainer} onClick={() => {
+                    if (item.navLink == "" || !item.navLink) {
+                        // expand sub navs
+                        handleNavItemExpand(isExpanded, item.title);
+                        return
+                    }
+                    handleNavItemClick(item.navLink);
+                }}
+                >
+                    <div className={styles.navTitle} ref={(element) => {
+                        navTitleRef.current[index] = element;
+                    }}>
+                        {truncate(item.title, 10)}
+                    </div>
+                    <div className={styles.navIcon} ref={(element) => {
+                        navIconRef.current[index] = element;
+                    }}>
+                        <Icon />
+                    </div>
                 </div>
-                <div className={styles.navIcon} ref={(element) => {
-                    navIconRef.current[index] = element;
-                }}>
-                    <Icon />
-                </div>
+                <ul className={styles.subNavList}>
+                    {subNavList}
+
+                    {/* <div className={styles.subSolidNavLeftBar} ref={solidNavLeftBarRef} /> */}
+                </ul>
             </li>
         );
     });
 
-
-    const pathname = usePathname();
     useLayoutEffect(() => {
-        const activeIndex = navItems.findIndex(
+        const activeIndex = visibleNavItems.findIndex(
             (item) => `/${item.navLink}` === pathname
         );
 
-        if (activeIndex === -1) {
+        const activeSubNavIndex = visibleNavItems.findIndex(
+            (item) =>
+                item.subNavItems?.some(
+                    (subItem) => `/${subItem.navLink}` === pathname
+                ) ?? false
+        );
+
+        // Use the parent index when a sub-navigation item is active.
+        const currentActiveIndex =
+            activeIndex !== -1 ? activeIndex : activeSubNavIndex;
+
+        if (currentActiveIndex === -1) {
             return;
         }
 
-        const activeItem = navItemRef.current[activeIndex];
+        const activeItem = navItemRef.current[currentActiveIndex];
 
         if (!activeItem || !solidNavLeftBarRef.current) {
             return;
         }
 
         const activeTitle = activeItem.children[0];
-
         const activeIcon = activeItem.querySelector(
             `.${styles.navIcon}`
         );
@@ -253,7 +388,6 @@ const StaffSideBarMenu = () => {
 
         if (previousItem && previousItem !== activeItem) {
             const previousTitle = previousItem.children[0];
-
             const previousIcon = previousItem.querySelector(
                 `.${styles.navIcon}`
             );
@@ -309,7 +443,8 @@ const StaffSideBarMenu = () => {
             activeTitle,
             {
                 color: "var(--accent-color)",
-                duration: 0.2,
+                duration: 0.5,
+                ease: 'power1.in'
             },
             "<"
         );
@@ -319,40 +454,88 @@ const StaffSideBarMenu = () => {
             {
                 color: "var(--accent-color)",
                 duration: 0.2,
+                ease: 'power1.in'
             },
             "<"
         );
 
-        previousActiveIndexRef.current = activeIndex;
-    }, [pathname]);
+        previousActiveIndexRef.current = currentActiveIndex;
+
+        return () => {
+            tl.kill();
+        };
+    }, [pathname, visibleNavItems]);
 
 
+    const skeletonNavItems = Array.from({ length: 6 }, (_, rowIndex) => (
+        <div
+            key={rowIndex}
+            className={styles.navItemContainer}
+            aria-hidden="true"
+        >
+            <div className={styles.navTitle}>
+                <Skeleton
+                    width={rowIndex === 0 ? "100%" : "80%"}
+                    height={24}
+                    radius={10}
+                />
+            </div>
+        </div>
+    ));
     return (
         <div className={styles.menuSideBar} ref={sideBarMenuRef}>
             {/* brand and expansion toogle */}
             <div className={styles.brandAndExpansionToggle}>
                 <div className={styles.brand} ref={brandRef}>
-                    MC
+                    {isAuthLoading ?
+                        (<Skeleton
+                            width={10}
+                            height={30}
+                            radius={10} />
+                        ) : (
+                            <span>
+                                MC
+                            </span>
+                        )
+                    }
                 </div>
 
-                <div className={styles.expansionToggle} ref={toggleRef}>
-                    <div className={styles.desktopToggle} onClick={() => {
-                        toggleSidebar()
-                    }}>
-                        <Sidebar size={24} />
-                    </div>
-                    <div className={styles.mobileToggle} onClick={toggleMobileSidebar}>
-                        Close
-                    </div>
-                </div>
+                {isAuthLoading ?
+                    (<Skeleton
+                        width={30}
+                        height={30}
+                        radius={10} />
+                    ) : (
+                        <div className={styles.expansionToggle} ref={toggleRef}>
+                            <div className={styles.desktopToggle} onClick={() => {
+                                toggleSidebar()
+                            }}>
+                                <Sidebar size={24} />
+                            </div>
+                            <div className={styles.mobileToggle} onClick={toggleMobileSidebar}>
+                                Close
+                            </div>
+                        </div>
+                    )
+                }
             </div>
 
             {/* list nav items container */}
-            <div className={styles.navItemsContainer}>
+            <ul className={styles.navItemsContainer}>
+                {/* {isAuthLoading ?
+                    (
+                        <Skeleton
+                            width={5}
+                            height={30}
+                            className={styles.solidNavLeftBar}
+                        />
+                    ) :
+                    ( */}
                 <div className={styles.solidNavLeftBar} ref={solidNavLeftBarRef} />
-                {navList}
+                {/* )} */}
+                {isAuthLoading ? skeletonNavItems : navList}
 
-            </div>
+            </ul>
         </div>
 
     );

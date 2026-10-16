@@ -39,7 +39,6 @@
 
 .courseList::after {
     content: "";
-    background-color: pink;
     height: 30px;
     width: 130px;
     display: none;

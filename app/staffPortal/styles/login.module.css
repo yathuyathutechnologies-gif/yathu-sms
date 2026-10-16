@@ -1,11 +1,13 @@
 .container {
+    position: fixed;
     width: 100vw;
-    min-height: 100vh;
     position: relative;
+    height: 100vh;
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: var(--primary-color);
+    margin-left: 0px;
 }
 
 .backgroundContainer {
@@ -16,10 +18,12 @@
 
 .backgroundImageContainer {
     position: relative;
-    width: 70%;
+    width: 100%;
     height: 100%;
     overflow: hidden;
     filter: blur(1px);
+    background-color: #666;
+    clip-path: url('#backgroundClip');
 }
 
 
@@ -95,9 +99,7 @@
     color: var(--primary-color);
 }
 
-/* .systemName{
-    background-color: pink;
-} */
+
 .companyName,
 .systemName {
     height: 20px;
@@ -147,12 +149,12 @@
     font-size: 1rem;
 }
 
-.inputGroup {
+.emailContainer {
     position: relative;
     width: 100%;
 }
 
-.inputGroup input {
+.emailContainer input {
     width: 100%;
     padding: 16px;
     font-size: 16px;
@@ -162,7 +164,7 @@
     background: transparent;
 }
 
-.inputGroup label {
+.emailContainer label {
     position: absolute;
     left: 14px;
     top: 50%;
@@ -173,10 +175,25 @@
     pointer-events: none;
     transition: 0.2s ease;
 }
-.inputGroup input:focus+label,
-.inputGroup input:not(:placeholder-shown)+label {
+
+.emailContainer input:focus+label,
+.emailContainer input:not(:placeholder-shown)+label {
     top: 0;
     font-size: 12px;
+}
+
+.form input:autofill {
+    -webkit-text-fill-color: #ffffff;
+    box-shadow: 0 0 0 1000px rgb(255, 255, 255) inset;
+}
+
+.form input:-webkit-autofill,
+.form input:-webkit-autofill:hover,
+.form input:-webkit-autofill:focus,
+.form input:-webkit-autofill:active {
+    -webkit-text-fill-color: #333;
+    box-shadow: 0 0 0 1000px rgb(255, 255, 255) inset;
+    caret-color: #333;
 }
 
 .form button {
@@ -253,22 +270,30 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    transition: opacity 0.2s ease;
+    transition: background-color 0.2s ease, transform 0.1s ease-in;
 }
 
 .loginButton:hover {
-    opacity: 0.9;
+    background-color: var(--accent-hover);
+    transform: translateY(-2px);
 }
 
 .loginButton:active {
     transform: scale(0.98);
 }
-.loginButton:disabled{
+
+.loginButton:disabled {
     opacity: 0.75;
     background-color: var(--disabled-color);
     color: #666;
 }
-@media (max-width:900) {
+
+@media (max-width:900px) {
+    .backgroundImageContainer {
+        filter: blur(1px);
+        clip-path: none;
+    }
+
     .schoolName {
         font-size: 30;
     }
@@ -276,9 +301,7 @@
     .brand {
         font-size: 12px;
     }
-}
 
-@media (max-width:680px) {
     .bgImage {
         object-fit: cover;
         clip-path: none;
@@ -293,7 +316,7 @@
 
     .loginContainer {
         width: 100%;
-        position: absolute;
+        position: fixed;
         bottom: 0px;
         border-radius: 20px 20px 0px 0px;
         height: 65%;
@@ -350,8 +373,21 @@
         height: 80%;
     }
 
-    .inputGroup input {
+    .form {
+        display: flex;
+        justify-content: center;
+        align-items: center;
         width: 100%;
+    }
+
+    .emailContainer,
+    .passwordContainer {
+        position: relative;
+        width: 300px;
+    }
+
+    .emailContainer input,
+    .passwordContainer input {
         padding: 8px;
         border: 1px solid #ccc;
         border-radius: 18px;
@@ -365,4 +401,14 @@
         transform: translateY(20px);
         align-self: center;
     }
+}
+
+@media (max-width:768px) {
+
+    .emailContainer,
+    .passwordContainer {
+        position: relative;
+        width: 220px;
+    }
+
 }

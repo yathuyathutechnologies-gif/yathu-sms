@@ -104,17 +104,11 @@ const TableDisplay = ({
 
     const [tableData, setTableData] = useState<TableItem[]>([]);
 
-    const [selectedIds, setSelectedIds] = useState<
-        Array<string | number>
-    >([]);
+    const [selectedIds, setSelectedIds] = useState<Array<string | number>>([]);
 
-    const [expandedIds, setExpandedIds] = useState<
-        Array<string | number>
-    >([]);
+    const [expandedIds, setExpandedIds] = useState<Array<string | number>>([]);
 
-    const additionalInfoRefs = useRef<
-        Array<HTMLDivElement | null>
-    >([]);
+    const additionalInfoRefs = useRef<Array<HTMLDivElement | null>>([]);
 
     // PAGINATION
 
@@ -232,7 +226,7 @@ const TableDisplay = ({
         });
     };
     const clearSort = () => {
-        setSortBy("FirstName");
+        setSortBy("firstName");
         setSortOrder("ASC");
     };
     // FETCH DATA
@@ -699,8 +693,10 @@ const TableDisplay = ({
             className={styles.container}
             ref={containerRef}
         >
+
             {/* Search, sort and filter actions */}
             <ul
+
                 className={styles.actionContainer}
                 ref={actionContainerRef}
             >
