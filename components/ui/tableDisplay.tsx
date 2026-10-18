@@ -123,7 +123,6 @@ const TableDisplay = ({
     const [loading, setLoading] = useState(false);
     const [initialLoaded, setInitialLoaded] = useState(false);
     const [error, setError] = useState<string | null>(null);
-
     const containerRef = useRef<HTMLDivElement | null>(null);
     const loadMoreRef = useRef<HTMLDivElement | null>(null);
 
@@ -229,7 +228,7 @@ const TableDisplay = ({
         setSortBy("firstName");
         setSortOrder("ASC");
     };
-    // FETCH DATA
+    // fetch data
 
     useEffect(() => {
         if (isAuthLoading || !isAuthenticated) {
@@ -451,135 +450,6 @@ const TableDisplay = ({
         });
     };
 
-    useLayoutEffect(() => {
-        additionalInfoRefs.current.forEach((element, index) => {
-            if (!element) {
-                return;
-            }
-
-            const item = tableData[index];
-
-            if (!item) {
-                return;
-            }
-
-            const isExpanded = expandedIds.includes(item.id);
-
-            gsap.to(element, {
-                height: isExpanded ? "auto" : 0,
-                duration: 0.4,
-                ease: "power1.out",
-            });
-        });
-    }, [expandedIds, tableData]);
-
-    // MOBILE CARDS
-
-    const mobileCardItems = tableData.map((item, index) => {
-        const isExpanded = expandedIds.includes(item.id);
-
-
-        const firstColumn = tableTitle[0];
-        const secondColumn = tableTitle[1];
-        const thirdColumn = tableTitle[2];
-        const fourthColumn = tableTitle[3];
-
-        return (
-            <li
-                key={item.id}
-                className={styles.mobileCardItem}
-            >
-                <div className={styles.cardHeader}>
-                    <div className={styles.status}>
-                        <div />
-                        <div />
-                    </div>
-
-                    <div className={styles.headerInformation}>
-                        <div className={styles.mainMessage}>
-                            <span>
-                                {firstColumn
-                                    ? truncate(
-                                        String(item[firstColumn.key] ?? ""),
-                                        16
-                                    )
-                                    : ""}
-                            </span>
-
-                            {secondColumn && (
-                                <span>
-                                    {truncate(
-                                        String(item[secondColumn.key] ?? ""),
-                                        12
-                                    )}
-                                </span>
-                            )}
-                        </div>
-
-                        {thirdColumn && (
-                            <div className={styles.secondMessage}>
-                                {truncate(
-                                    String(item[thirdColumn.key] ?? ""),
-                                    12
-                                )}
-                            </div>
-                        )}
-
-                        {fourthColumn && (
-                            <div className={styles.thirdMessage}>
-                                {truncate(
-                                    String(item[fourthColumn.key] ?? ""),
-                                    12
-                                )}
-                            </div>
-                        )}
-                    </div>
-
-                    <button
-                        type="button"
-                        className={styles.shoreMore}
-                        aria-expanded={isExpanded}
-                        aria-label={
-                            isExpanded
-                                ? "Show less information"
-                                : "Show more information"
-                        }
-                        onClick={() =>
-                            handleAccordionExpand(isExpanded, item.id)
-                        }
-                    >
-                        {isExpanded ? <Minus /> : <Plus />}
-                    </button>
-                </div>
-
-                <div
-                    className={styles.additionalInfo}
-                    ref={(element) => {
-                        additionalInfoRefs.current[index] = element;
-                    }}
-                >
-                    {tableTitle
-                        .slice(1, isExpanded ? tableTitle.length : 3)
-                        .map((column) => (
-                            <div
-                                key={column.key}
-                                className={styles.titleAndValue}
-                            >
-                                <div className={styles.title}>
-                                    {column.title}
-                                    <span>:</span>
-                                </div>
-
-                                <div className={styles.value}>
-                                    {item[column.key] ?? ""}
-                                </div>
-                            </div>
-                        ))}
-                </div>
-            </li>
-        );
-    });
-
 
     useLayoutEffect(() => {
         const element = filterRef.current;
@@ -662,31 +532,166 @@ const TableDisplay = ({
         };
     }, [showSortDialog, actionToogleOpen]);
 
-    // PIN ACTION BAR
-    useLayoutEffect(() => {
-        const container = containerRef.current;
-        const actionContainer = actionContainerRef.current;
+useLayoutEffect(() => {
+    additionalInfoRefs.current.forEach((element, index) => {
+        if (!element) return;
 
-        if (!container || !actionContainer) {
-            return;
-        }
+        const item = tableData[index];
+        if (!item) return;
 
-        const context = gsap.context(() => {
-            ScrollTrigger.create({
-                trigger: container,
-                start: "top 60px",
-                end: "bottom top",
-                pin: actionContainer,
-                pinSpacing: false,
-                scrub: true,
-                markers: false,
+        const isExpanded = expandedIds.includes(item.id);
+
+        // Stop any existing animation
+        gsap.killTweensOf(element);
+
+        if (isExpanded) {
+            gsap.set(element, {
+                height: "auto",
+                overflow: "hidden",
             });
-        }, container);
 
-        return () => {
-            context.revert();
-        };
-    }, []);
+            const fullHeight = element.scrollHeight;
+
+            gsap.fromTo(
+                element,
+                { height: 0 },
+                {
+                    height: fullHeight,
+                    duration: 1,
+                    ease: "power1.out",
+                    onComplete: () => {
+                        gsap.set(element, {
+                            height: "auto",
+                            overflow: "visible",
+                        });
+                    },
+                }
+            );
+        } else {
+            // Capture height before changing it
+            const currentHeight = element.getBoundingClientRect().height;
+
+            gsap.set(element, {
+                height: currentHeight,
+                overflow: "hidden",
+            });
+
+            gsap.to(element, {
+                height: 0,
+                duration: 2,
+                ease: "power1.out",
+            });
+        }
+    });
+}, [expandedIds, tableData]);
+
+    // MOBILE CARDS
+
+    const mobileCardItems = tableData.map((item, index) => {
+        const isExpanded = expandedIds.includes(item.id);
+
+
+        const firstColumn = tableTitle[1];
+        const secondColumn = tableTitle[2];
+        const thirdColumn = tableTitle[3];
+        const fourthColumn = tableTitle[4];
+
+        return (
+            <li
+                key={item.id}
+                className={styles.mobileCardItem}
+            >
+                <div className={styles.cardHeader}>
+                    <div className={styles.status}>
+                        <div />
+                        <div />
+                    </div>
+
+                    <div className={styles.headerInformation}>
+                        <div className={styles.mainMessage}>
+                            <span>
+                                {firstColumn
+                                    ? truncate(
+                                        String(item[firstColumn.key] ?? ""),
+                                        16
+                                    )
+                                    : ""}
+                            </span>
+
+                            {secondColumn && (
+                                <span>
+                                    {truncate(
+                                        String(item[secondColumn.key] ?? ""),
+                                        12
+                                    )}
+                                </span>
+                            )}
+                        </div>
+
+                        {thirdColumn && (
+                            <div className={styles.secondMessage}>
+                                {truncate(
+                                    String(item[thirdColumn.key] ?? ""),
+                                    12
+                                )}
+                            </div>
+                        )}
+
+                        {fourthColumn && (
+                            <div className={styles.thirdMessage}>
+                                {truncate(
+                                    String(item[fourthColumn.key] ?? ""),
+                                    12
+                                )}
+                            </div>
+                        )}
+                    </div>
+
+                    <button
+                        type="button"
+                        className={styles.shoreMore}
+                        aria-expanded={isExpanded}
+                        aria-label={
+                            isExpanded
+                                ? "Show less information"
+                                : "Show more information"
+                        }
+                        onClick={() =>
+                            handleAccordionExpand(isExpanded, item.id)
+                        }
+                    >
+                        {isExpanded ? <Minus /> : <Plus />}
+                    </button>
+                </div>
+
+                <div
+                    className={styles.additionalInfo}
+                    ref={(element) => {
+                        additionalInfoRefs.current[index] = element;
+                    }}
+                >
+                    {tableTitle
+                        .slice(1)
+                        .map((column) => (
+                            <div
+                                key={column.key}
+                                className={styles.titleAndValue}
+                            >
+                                <div className={styles.title}>
+                                    {column.title}
+                                    <span>:</span>
+                                </div>
+
+                                <div className={styles.value}>
+                                    {item[column.key] ?? ""}
+                                </div>
+                            </div>
+                        ))}
+                </div>
+            </li>
+        );
+    });
+
 
     return (
         <div

@@ -5,6 +5,12 @@ import { useStaffPortal } from "@/app/staffPortal/StaffPortalContext";
 
 export const BaseUrl = "http://localhost:3001";
 
+type ApiError = {
+    success: boolean;
+    message: string;
+    code?: string;
+    errors?: string[];
+};
 export function useApiFetch() {
     const {
         accessToken,
@@ -112,7 +118,14 @@ export function useApiFetch() {
             );
 
             if (response.status !== 401) {
+                const body = await response.clone().text();
+                if (!response.ok) {
+                    const error: ApiError = JSON.parse(body);
 
+                    console.error("Error code:", error.code);
+                    console.error("Error message:", error.message);
+                    console.error("Validation errors:", error.errors);
+                }
                 return response;
             }
 

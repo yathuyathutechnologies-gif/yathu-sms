@@ -3,12 +3,26 @@
     min-width: 100%;
     min-height: 100vh;
     margin-top: 40px;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+    overflow: visible;
     background-color: var(--primary-color);
 }
+
+.actionContainer {
+    position: sticky;
+    top: 130px;
+    z-index: 99;
+    width: 95%;
+    height: 40px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 100;
+    margin-bottom: 20px;
+    background-color: var(--primary-color);
+}
+
 
 .container table {
     width: 95%;
@@ -17,20 +31,18 @@
 
 .container th,
 .container td {
-    padding: 10px 20px;
+    padding: 1px 2px;
     text-align: left;
     border-bottom: 1px solid #ccc;
 }
 
-.container th {
-    height: 20px;
-}
 
 .container td,
 .container tr:nth-child(even),
 .container tr:nth-child(odd) {
     transition: background-color 0.2s ease-in;
 }
+
 
 /* .container td:hover {
     background-color: rgba(255, 68, 0, 0.25);
@@ -56,7 +68,7 @@
 .mobileCardItem {
     width: 100%;
     overflow: hidden;
-    padding: 10px 2px 0px 2px;
+    padding: 10px 2px 5px 2px;
     border-bottom: 1px solid rgba(0, 0, 0, 0.171);
     font-size: 14px;
     margin-bottom: 0px;
@@ -75,7 +87,13 @@
     /* transform: translateY(-8px); */
 }
 
-.additionalInfo>:nth-child(1) {
+.additionalInfo {
+    height: 0;
+    overflow: hidden;
+}
+
+.additionalInfo > :nth-child(1) {
+    box-sizing: border-box;
     padding-top: 12px;
     height: 60px;
 }
@@ -96,7 +114,6 @@
 @media (max-width:768) {
     .container {
         margin-top: 15px;
-        overflow-x: hidden;
     }
 
     .container table {
@@ -105,6 +122,9 @@
 
     .cardContainer {
         display: block;
+    }
+    .actionContainer{
+        top: 112;
     }
 }
 
@@ -197,23 +217,7 @@
     align-items: center;
 }
 
-.additionalInfo {
-    height: 0;
-}
 
-.actionContainer {
-    position: relative;
-    width: 95%;
-    height: 40px;
-    padding: 0px 20px;
-    display: flex;
-    justify-content: end;
-    align-items: center;
-    font-size: 14px;
-    font-weight: 100;
-    margin-bottom: 20px;
-    background-color: var(--primary-color);
-}
 
 @media (max-width:768) {
     .actionContainer {

@@ -4,7 +4,7 @@ import styles from './styles/staffSideMenu.module.css';
 import gsap from 'gsap';
 import { truncate } from '../functions/truncate';
 import { permission, title } from 'process';
-import { Home, Icon, Sidebar } from 'lucide-react';
+import { Home, Icon, Sidebar, User, X } from 'lucide-react';
 import HomeIcon from '../icons/HomeIcon';
 import StudentIcon from '../icons/StudentIcon';
 import { useStaffPortal } from '@/app/staffPortal/StaffPortalContext';
@@ -14,6 +14,7 @@ import ClassIcon from '../icons/classIcon';
 import LectureIcon from '../icons/LectureIcon';
 import ExamIcon from '../icons/ExamIcon';
 import Skeleton from './skeleton';
+import UserIcon from '../icons/User';
 interface navItem {
     title: string;
     icon: ComponentType<{ color?: string, size?: number }>;
@@ -28,7 +29,7 @@ const navItems: navItem[] = [
         title: 'DashBoard',
         icon: HomeIcon,
         navLink: 'staffPortal/dashBoard',
-        iconColor: 'black',
+        iconColor: 'var(--secondary-color)',
         permissions: [],
         roles: ['admin', 'lecturer']
     },
@@ -36,7 +37,7 @@ const navItems: navItem[] = [
         title: 'Students',
         icon: StudentIcon,
         // navLink: 'staffPortal/students',
-        iconColor: 'black',
+        iconColor: 'var(--secondary-color)',
         permissions: ['students.read'],
         roles: ['lecturer', 'admin'],
         subNavItems: [
@@ -44,14 +45,21 @@ const navItems: navItem[] = [
                 title: 'My students',
                 icon: StudentIcon,
                 navLink: 'staffPortal/students/mystudents',
-                iconColor: 'black',
+                iconColor: 'var(--secondary-color)',
                 permissions: [],
                 roles: ['lecturer']
             }, {
                 title: 'All students',
                 icon: StudentIcon,
                 navLink: 'staffPortal/students/allstudents',
-                iconColor: 'black',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            }, {
+                title: 'Add students',
+                icon: StudentIcon,
+                navLink: 'staffPortal/students/addstudents',
+                iconColor: 'var(--secondary-color)',
                 permissions: [],
                 roles: ['admin']
             },
@@ -61,7 +69,7 @@ const navItems: navItem[] = [
         title: 'Lectures',
         icon: LectureIcon,
         navLink: 'staffPortal/lecturers',
-        iconColor: 'black',
+        iconColor: 'var(--secondary-color)',
         permissions: ['lecturers.read'],
         roles: ['lecturer']
     },
@@ -69,7 +77,7 @@ const navItems: navItem[] = [
         title: 'Class',
         icon: ClassIcon,
         navLink: 'staffPortal/classes',
-        iconColor: 'black',
+        iconColor: 'var(--secondary-color)',
         permissions: ['timetable.read'],
         roles: ['lecturer']
     },
@@ -77,16 +85,33 @@ const navItems: navItem[] = [
         title: 'Assignment',
         icon: AssignmentIcon,
         // navLink: 'staffPortal/students',
-        iconColor: 'black',
+        iconColor: 'var(--secondary-color)',
         permissions: [],
         roles: ['lecturer']
     }, {
         title: 'Exam',
         icon: ExamIcon,
         // navLink: 'staffPortal/students',
-        iconColor: 'black',
+        iconColor: 'var(--secondary-color)',
         permissions: [],
         roles: ['lecturer']
+    }, {
+        title: 'User management',
+        icon: ExamIcon,
+        // navLink: 'staffPortal/students',
+        iconColor: 'var(--secondary-color)',
+        permissions: [],
+        roles: ['admin'],
+        subNavItems: [
+            {
+                title: 'Users',
+                icon: UserIcon,
+                navLink: 'staffPortal/userManagement/allUsers',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            }
+        ]
     }
 ];
 
@@ -95,14 +120,31 @@ const StaffSideBarMenu = () => {
     const route = useRouter();
     // use ref
     const sideBarMenuRef = useRef(null);
+
     const brandRef = useRef(null);
+
     const toggleRef = useRef(null);
+
     const navTitleRef = useRef<(HTMLDivElement | null)[]>([]);
+
     const navIconRef = useRef<(HTMLDivElement | null)[]>([]);
+
+    const subNavTitleRef = useRef<(HTMLDivElement | null)[][]>([]);
+
+    const subNavIconRef = useRef<(HTMLDivElement | null)[][]>([]);
+
+    const subNavItemRef = useRef<(HTMLLIElement | null)[][]>([]);
+
+    const subNavListRef = useRef<(HTMLUListElement | null)[]>([]);
+
     const solidNavLeftBarRef = useRef<HTMLDivElement | null>(null);
+
     const navItemRef = useRef<(HTMLLIElement | null)[]>([]);
+
     const previousActiveIndexRef = useRef<number>(-1);
+    
     const [expadedNavItemIds, setExpandedNavItemIds] = useState<string[]>([])
+    
     const pathname = usePathname();
 
     const handleNavItemExpand = (
@@ -127,7 +169,7 @@ const StaffSideBarMenu = () => {
 
     useLayoutEffect(() => {
 
-        console.log(isAuthLoading, mobileSidebarOpen)
+        // console.log(isAuthLoading, mobileSidebarOpen)
         const brand = brandRef.current;
         const toggle = toggleRef.current;
         const sideBarMenu = sideBarMenuRef.current
@@ -178,13 +220,12 @@ const StaffSideBarMenu = () => {
                         ease: 'power1.in'
                     }, '<')
             }
-            expandSideBarNavItems(sidebarExpanded);
+            expandSideBarNavItems(sidebarExpanded, tl);
         });
 
         mm.add("(max-width: 768px)", () => {
             // close toogle
             const tl = gsap.timeline({})
-            // we are reversing the boolean because it works inversely for desktop and mobile
             if (!mobileSidebarOpen) {
                 tl.to(sideBarMenuRef.current, {
                     x: -300,
@@ -201,34 +242,59 @@ const StaffSideBarMenu = () => {
             }
         });
         // return () => mm.revert();
-    }, [sidebarExpanded, mobileSidebarOpen]);
+    }, [sidebarExpanded, mobileSidebarOpen, isAuthLoading]);
 
 
-    const expandSideBarNavItems = (isExpanded: boolean) => {
-        const tl = gsap.timeline({});
-        const navTitle = navItemRef.current;
+    const expandSideBarNavItems = (isExpanded: boolean, tl: gsap.core.Timeline) => {
+        // const tl = gsap.timeline({});
+        const navTitle = navTitleRef.current;
         const navIcon = navIconRef.current;
 
+        const subNavTitle = subNavTitleRef.current;
+        const subNavIcon = subNavIconRef.current;
+        const subNavList = subNavListRef.current;
+        const subNavItem=subNavItemRef.current;
         if (!navIcon || !navTitle) {
             return
         }
         if (!isExpanded) {
             tl
+                .to(subNavList, {
+                    padding: '0px 0px 0px 0px',
+                    duration: 0.5
+                }, '<')
                 .to(navTitle, {
                     x: '-200px',
+                    ease: 'power1.in',
+                }, '<')
+                .to(subNavTitle, {
+                    x: '-200px',
+                    height: '40px',
                     ease: 'power1.in'
-                })
+                }, '<')
                 .to(navIcon, {
-                    // x: '-10px',
+                    x: '-10px',
                     width: '90px',
-                    padding: '0px',
-                    gap: '0px',
                     ease: 'power1.in'
-                })
+                }, '<')
+                .to(subNavIcon, {
+                    x: '-10px',
+                    width: '90px',
+                    ease: 'power1.in'
+                }, '<')
                 .to(navTitle, {
                     opacity: 0,
                     ease: 'power1.in'
                 }, '<')
+                .to(subNavTitle, {
+                    opacity: 0,
+                    ease: 'power1.in'
+                }, '<')
+                .to(subNavItem,{
+                    borderLeft:'none'
+                },'<')
+
+
         }
         else {
             tl
@@ -236,17 +302,39 @@ const StaffSideBarMenu = () => {
                     opacity: 1,
                     ease: 'power1.in'
                 }, '<')
+                .to(subNavTitle, {
+                    opacity: 1,
+                    ease: 'power1.in'
+                }, '<')
                 .to(navIcon, {
+                    x: 0,
+                    ease: 'power1.in'
+                }, '<')
+                .to(subNavIcon, {
                     x: 0,
                     ease: 'power1.in'
                 }, '<')
                 .to(navTitle, {
                     x: 0,
                     ease: 'power1.in'
-                })
+                }, '<')
+                .to(subNavTitle, {
+                    x: 0,
+                    ease: 'power1.in'
+                }, '<')
+                .to(subNavList, {
+                    padding: '0px 6px 0px 15px',
+                }, '<')
+                
+                .to(subNavItem,{
+                    borderLeft:'1px solid var(--secondary-color)',
+                    delay:0.5
+                },'>')
 
         }
     }
+
+
     const handleNavItemClick = (link: string) => {
         if (link === '') {
             return
@@ -290,18 +378,36 @@ const StaffSideBarMenu = () => {
                         }
                         handleNavItemClick(subItem.navLink);
                     }}
+                         ref={(element) => {
+                            if (!subNavItemRef.current[index]) {
+                                subNavItemRef.current[index] = [];
+                            }
+
+                            subNavItemRef.current[index][subIndex] =
+                                element;
+                        }}
                 >
                     <div className={styles.subNavTitle}
-                    // ref={(element) => {
-                    //     navTitleRef.current[index] = element;
-                    // }}
+                        ref={(element) => {
+                            if (!subNavTitleRef.current[index]) {
+                                subNavTitleRef.current[index] = [];
+                            }
+
+                            subNavTitleRef.current[index][subIndex] =
+                                element;
+                        }}
                     >
                         {truncate(subItem.title, 15)}
                     </div>
                     <div className={styles.subNavIcon}
-                    //  ref={(element) => {
-                    //     navIconRef.current[index] = element;
-                    // }}
+                        ref={(element) => {
+                            if (!subNavIconRef.current[index]) {
+                                subNavIconRef.current[index] = [];
+                            }
+
+                            subNavIconRef.current[index][subIndex] =
+                                element;
+                        }}
                     >
                         <Icon />
                     </div>
@@ -326,7 +432,7 @@ const StaffSideBarMenu = () => {
                     <div className={styles.navTitle} ref={(element) => {
                         navTitleRef.current[index] = element;
                     }}>
-                        {truncate(item.title, 10)}
+                        {truncate(item.title, 15)}
                     </div>
                     <div className={styles.navIcon} ref={(element) => {
                         navIconRef.current[index] = element;
@@ -334,10 +440,12 @@ const StaffSideBarMenu = () => {
                         <Icon />
                     </div>
                 </div>
-                <ul className={styles.subNavList}>
+                <ul className={styles.subNavList} ref={(element) => {
+                    subNavListRef.current[index] = element;
+                }}>
                     {subNavList}
 
-                    {/* <div className={styles.subSolidNavLeftBar} ref={solidNavLeftBarRef} /> */}
+
                 </ul>
             </li>
         );
@@ -400,7 +508,7 @@ const StaffSideBarMenu = () => {
             tl.to(
                 previousTitle,
                 {
-                    color: "black",
+                    color: 'var(--secondary-color)',
                     duration: 0.2,
                 },
                 "<"
@@ -410,7 +518,7 @@ const StaffSideBarMenu = () => {
                 tl.to(
                     previousIcon,
                     {
-                        color: "black",
+                        color: 'var(--secondary-color)',
                         duration: 0.2,
                     },
                     "<"
@@ -428,15 +536,6 @@ const StaffSideBarMenu = () => {
                 ease: "power2.out",
             },
             previousItem ? ">" : "<"
-        );
-
-        tl.to(
-            activeItem,
-            {
-                x: 4,
-                duration: 0.2,
-            },
-            "<"
         );
 
         tl.to(
@@ -458,6 +557,7 @@ const StaffSideBarMenu = () => {
             },
             "<"
         );
+
 
         previousActiveIndexRef.current = currentActiveIndex;
 
@@ -512,9 +612,9 @@ const StaffSideBarMenu = () => {
                             }}>
                                 <Sidebar size={24} />
                             </div>
-                            <div className={styles.mobileToggle} onClick={toggleMobileSidebar}>
-                                Close
-                            </div>
+                            <button className={styles.mobileToggle} onClick={toggleMobileSidebar}>
+                                <X />
+                            </button>
                         </div>
                     )
                 }

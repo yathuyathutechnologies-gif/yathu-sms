@@ -5,16 +5,6 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import localFont from "next/font/local";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const hankenGrotesk = Hanken_Grotesk({
-  variable: "--font-hanken-grotesk",
-  subsets: ["latin"],
-  weight: "variable",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -40,7 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${hankenGrotesk.variable} h-full antialiased`}
+      className={`${Inter.variable} h-full antialiased`}
     >
       <body className={`min-h-full flex flex-col ${Inter.variable}`}>
         {/* <ThemeProvider
