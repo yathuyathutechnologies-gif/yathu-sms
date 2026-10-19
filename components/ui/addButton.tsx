@@ -3,6 +3,7 @@ import styles from './styles/addButton.module.css';
 import { ComponentType } from 'react';
 import { useStaffPortal } from '@/app/staffPortal/StaffPortalContext';
 interface AddButtonProp {
+    title:string;
     icon: ComponentType<{ color?: string, size?: number }>;
     permissions?: string[];
     roles?: string[];
@@ -10,6 +11,7 @@ interface AddButtonProp {
 }
 const AddButton = (
     {
+        title,
         icon,
         permissions,
         roles,
@@ -20,13 +22,14 @@ const AddButton = (
     const handleAddClick = () => {
 
     }
+    const Icon =icon;
     return (
             <button className={styles.addNew} onClick={toggleAddEntity}>
                 <span>
-                    Add student
+                    {title}
                 </span>
                 <div className={styles.addIcon}>
-                    <UserPlus2Icon size={18} />
+                    <Icon size={18} />
                 </div>
             </button>
     );

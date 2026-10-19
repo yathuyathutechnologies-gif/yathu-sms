@@ -77,6 +77,7 @@ const AllStudent = () => {
 
                     <div className={styles.topButtons} ref={buttonsContainerRef}>
                         <AddButton
+                        title={"Add student"}
                             // path="/staffPortal/students/add"
                             permissions={["students.create"]}
                             roles={["admin"]}

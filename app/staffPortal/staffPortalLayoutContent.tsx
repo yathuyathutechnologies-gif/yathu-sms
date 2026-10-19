@@ -42,7 +42,7 @@ export default function StaffPortalLayoutContent({
 
             return () => tl.kill();
         });
-        return () => mm.revert();
+        // return () => mm.revert();
     }, [sidebarExpanded, mobileSidebarOpen, isLoginPage]);
 
     return (

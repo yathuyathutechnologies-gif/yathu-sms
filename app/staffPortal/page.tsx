@@ -109,7 +109,6 @@ const StaffLoginPage = () => {
         setError(message);
         toast.error(`${truncate(message, 40)}`)
     }
-    // effect to show errors.
     return (
         <div className={styles.container}>
             {/* background image */}

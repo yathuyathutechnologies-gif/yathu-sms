@@ -151,7 +151,7 @@ const TableDisplay = ({
     const [filterBy, setFilterBy] = useState("none");
     const [filterValue, setFilterValue] = useState("");
     // SORT
-    const [sortBy, setSortBy] = useState("firstName");
+    const [sortBy, setSortBy] = useState("");
     const [sortOrder, setSortOrder] = useState<"ASC" | "DESC">("ASC");
     const [showSortDialog, setShowSortDialog] = useState(false);
     const sortRef = useRef(null);
@@ -186,8 +186,13 @@ const TableDisplay = ({
                 submittedFilter.filterValue.trim()
             );
         }
+        if (
+            sortBy !== "" &&
+            !sortOrder
+        ) {
         params.set("sortBy", sortBy);
         params.set("sortOrder", sortOrder);
+        }
 
         return params.toString();
     }, [debouncedSearch, submittedFilter, sortBy, sortOrder]);
@@ -225,8 +230,8 @@ const TableDisplay = ({
         });
     };
     const clearSort = () => {
-        setSortBy("firstName");
-        setSortOrder("ASC");
+        setSortBy("");
+        // setSortOrder();
     };
     // fetch data
 
@@ -283,9 +288,8 @@ const TableDisplay = ({
                 params.set("limit", String(PAGE_LIMIT));
 
                 const separator = dataUrl.includes("?") ? "&" : "?";
-
-                const url =
-                    `${dataUrl}${separator}${params.toString()}`;
+                
+                const url = `${dataUrl}${separator}${params.toString()}`;
 
                 const response = await apiFetchRef.current(url);
 
@@ -483,7 +487,7 @@ const TableDisplay = ({
                 .set(element, {
                     display: "none",
                 });
-                setShowFilterDialog(false)
+            setShowFilterDialog(false)
         }
         return () => {
             timeline.kill();
@@ -523,7 +527,7 @@ const TableDisplay = ({
                 .set(element, {
                     display: "none",
                 });
-                setShowSortDialog(false);
+            setShowSortDialog(false);
         }
 
 
@@ -532,58 +536,58 @@ const TableDisplay = ({
         };
     }, [showSortDialog, actionToogleOpen]);
 
-useLayoutEffect(() => {
-    additionalInfoRefs.current.forEach((element, index) => {
-        if (!element) return;
+    useLayoutEffect(() => {
+        additionalInfoRefs.current.forEach((element, index) => {
+            if (!element) return;
 
-        const item = tableData[index];
-        if (!item) return;
+            const item = tableData[index];
+            if (!item) return;
 
-        const isExpanded = expandedIds.includes(item.id);
+            const isExpanded = expandedIds.includes(item.id);
 
-        // Stop any existing animation
-        gsap.killTweensOf(element);
+            // Stop any existing animation
+            gsap.killTweensOf(element);
 
-        if (isExpanded) {
-            gsap.set(element, {
-                height: "auto",
-                overflow: "hidden",
-            });
+            if (isExpanded) {
+                gsap.set(element, {
+                    height: "auto",
+                    overflow: "hidden",
+                });
 
-            const fullHeight = element.scrollHeight;
+                const fullHeight = element.scrollHeight;
 
-            gsap.fromTo(
-                element,
-                { height: 0 },
-                {
-                    height: fullHeight,
-                    duration: 1,
+                gsap.fromTo(
+                    element,
+                    { height: 0 },
+                    {
+                        height: fullHeight,
+                        duration: 1,
+                        ease: "power1.out",
+                        onComplete: () => {
+                            gsap.set(element, {
+                                height: "auto",
+                                overflow: "visible",
+                            });
+                        },
+                    }
+                );
+            } else {
+                // Capture height before changing it
+                const currentHeight = element.getBoundingClientRect().height;
+
+                gsap.set(element, {
+                    height: currentHeight,
+                    overflow: "hidden",
+                });
+
+                gsap.to(element, {
+                    height: 0,
+                    duration: 2,
                     ease: "power1.out",
-                    onComplete: () => {
-                        gsap.set(element, {
-                            height: "auto",
-                            overflow: "visible",
-                        });
-                    },
-                }
-            );
-        } else {
-            // Capture height before changing it
-            const currentHeight = element.getBoundingClientRect().height;
-
-            gsap.set(element, {
-                height: currentHeight,
-                overflow: "hidden",
-            });
-
-            gsap.to(element, {
-                height: 0,
-                duration: 2,
-                ease: "power1.out",
-            });
-        }
-    });
-}, [expandedIds, tableData]);
+                });
+            }
+        });
+    }, [expandedIds, tableData]);
 
     // MOBILE CARDS
 
@@ -737,7 +741,7 @@ useLayoutEffect(() => {
                     }}
                 >
                     <FilterIcon size={20} />
-                  
+
                 </li>
             </ul>
 
@@ -888,69 +892,69 @@ useLayoutEffect(() => {
             </svg>
 
 
-  {/* Filter dialog */}
-                    <div
-                        className={styles.filterCard}
-                        ref={filterRef}
-                    >
-                        <label htmlFor="filterBy">
-                            Filter By
-                        </label>
+            {/* Filter dialog */}
+            <div
+                className={styles.filterCard}
+                ref={filterRef}
+            >
+                <label htmlFor="filterBy">
+                    Filter By
+                </label>
 
-                        <select
-                            id="filterBy"
-                            value={filterBy}
-                            onChange={(event) =>
-                                handleOnFilterChange(event.target.value)
-                            }
+                <select
+                    id="filterBy"
+                    value={filterBy}
+                    onChange={(event) =>
+                        handleOnFilterChange(event.target.value)
+                    }
+                >
+                    <option value="none">
+                        Select filter
+                    </option>
+
+                    {filterOptions.map((option) => (
+                        <option
+                            value={option.value}
+                            key={option.value}
                         >
-                            <option value="none">
-                                Select filter
-                            </option>
+                            {option.text}
+                        </option>
+                    ))}
+                </select>
 
-                            {filterOptions.map((option) => (
-                                <option
-                                    value={option.value}
-                                    key={option.value}
-                                >
-                                    {option.text}
-                                </option>
-                            ))}
-                        </select>
+                {filterBy !== "none" && (
+                    <input
+                        type="text"
+                        placeholder={`Enter ${filterBy}`}
+                        value={filterValue}
+                        onChange={(event) =>
+                            setFilterValue(event.target.value)
+                        }
+                    />
+                )}
 
-                        {filterBy !== "none" && (
-                            <input
-                                type="text"
-                                placeholder={`Enter ${filterBy}`}
-                                value={filterValue}
-                                onChange={(event) =>
-                                    setFilterValue(event.target.value)
-                                }
-                            />
-                        )}
+                <div className={styles.filterButtons}>
+                    <button
+                        type="button"
+                        className={styles.clearButton}
+                        onClick={clearFilter}
+                    >
+                        Clear
+                    </button>
 
-                        <div className={styles.filterButtons}>
-                            <button
-                                type="button"
-                                className={styles.clearButton}
-                                onClick={clearFilter}
-                            >
-                                Clear
-                            </button>
-
-                            <button
-                                type="button"
-                                className={styles.submitButton}
-                                disabled={
-                                    filterBy === "none" ||
-                                    !filterValue.trim()
-                                }
-                                onClick={submitFilter}
-                            >
-                                Apply
-                            </button>
-                        </div>
-                    </div>
+                    <button
+                        type="button"
+                        className={styles.submitButton}
+                        disabled={
+                            filterBy === "none" ||
+                            !filterValue.trim()
+                        }
+                        onClick={submitFilter}
+                    >
+                        Apply
+                    </button>
+                </div>
+            </div>
 
             {/* Sort dialog */}
             <div

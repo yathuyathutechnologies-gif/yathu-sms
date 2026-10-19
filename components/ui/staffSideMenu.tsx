@@ -15,6 +15,18 @@ import LectureIcon from '../icons/LectureIcon';
 import ExamIcon from '../icons/ExamIcon';
 import Skeleton from './skeleton';
 import UserIcon from '../icons/User';
+import RolesIcon from '../icons/roles';
+import PermissionIcon from '../icons/permission';
+import UserManagementIcon from '../icons/UserManagement';
+import AcademicIcon from '../icons/academicIcon';
+import CalenderIcon from '../icons/calenderIcon';
+import SemesterIcon from '../icons/semesterIcon';
+import DepartmentIcon from '../icons/departmentIcon';
+import ProgramIcon from '../icons/programIcon';
+import CourseIcon from '../icons/courseIcon';
+import CourseOfferingIcon from '../icons/courseOfferingIcon';
+import CurriculumIcon from '../icons/curriculumIcon';
+import ClassRules from '../icons/classRulesIcon';
 interface navItem {
     title: string;
     icon: ComponentType<{ color?: string, size?: number }>;
@@ -62,6 +74,20 @@ const navItems: navItem[] = [
                 iconColor: 'var(--secondary-color)',
                 permissions: [],
                 roles: ['admin']
+            }, {
+                title: 'Enrollment',
+                icon: StudentIcon,
+                // navLink: 'staffPortal/students/addstudents',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },{
+                title: 'Admissions',
+                icon: StudentIcon,
+                // navLink: 'staffPortal/students/addstudents',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
             },
         ]
     },
@@ -97,7 +123,7 @@ const navItems: navItem[] = [
         roles: ['lecturer']
     }, {
         title: 'User management',
-        icon: ExamIcon,
+        icon: UserManagementIcon,
         // navLink: 'staffPortal/students',
         iconColor: 'var(--secondary-color)',
         permissions: [],
@@ -107,6 +133,119 @@ const navItems: navItem[] = [
                 title: 'Users',
                 icon: UserIcon,
                 navLink: 'staffPortal/userManagement/allUsers',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Roles',
+                icon: RolesIcon,
+                navLink: 'staffPortal/userManagement/roles',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Permission',
+                icon: PermissionIcon,
+                navLink: 'staffPortal/userManagement/permissions',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Role permission',
+                icon: PermissionIcon,
+                // navLink: 'staffPortal/userManagement/permissions',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            }
+        ]
+    }, {
+        title: 'Academic',
+        icon: AcademicIcon,
+        // navLink: 'staffPortal/students',
+        iconColor: 'var(--secondary-color)',
+        permissions: [],
+        roles: ['admin'],
+        subNavItems: [
+            {
+                title: 'Years',
+                icon: CalenderIcon,
+                // navLink: 'staffPortal/userManagement/allUsers',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Semester',
+                icon: SemesterIcon,
+                navLink: 'staffPortal/userManagement/roles',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Departments',
+                icon: DepartmentIcon,
+                // navLink: 'staffPortal/userManagement/permissions',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Programs',
+                icon: ProgramIcon,
+                // navLink: 'staffPortal/userManagement/permissions',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Courses',
+                icon: CourseIcon,
+                // navLink: 'staffPortal/userManagement/permissions',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Course offering',
+                icon: CourseOfferingIcon,
+                // navLink: 'staffPortal/userManagement/permissions',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Curriculum',
+                icon: CurriculumIcon,
+                // navLink: 'staffPortal/userManagement/permissions',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Programs',
+                icon: ProgramIcon,
+                // navLink: 'staffPortal/userManagement/permissions',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Class rules',
+                icon: ClassRules,
+                // navLink: 'staffPortal/userManagement/permissions',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Calender',
+                icon: CalenderIcon,
+                // navLink: 'staffPortal/userManagement/permissions',
                 iconColor: 'var(--secondary-color)',
                 permissions: [],
                 roles: ['admin']
@@ -142,9 +281,9 @@ const StaffSideBarMenu = () => {
     const navItemRef = useRef<(HTMLLIElement | null)[]>([]);
 
     const previousActiveIndexRef = useRef<number>(-1);
-    
-    const [expadedNavItemIds, setExpandedNavItemIds] = useState<string[]>([])
-    
+
+    const [expandedNavItemIds, setExpandedNavItemIds] = useState<string[]>([])
+
     const pathname = usePathname();
 
     const handleNavItemExpand = (
@@ -157,6 +296,8 @@ const StaffSideBarMenu = () => {
                 : [...previous, id];
         });
     };
+
+
     const {
         sidebarExpanded,
         toggleSidebar,
@@ -253,7 +394,7 @@ const StaffSideBarMenu = () => {
         const subNavTitle = subNavTitleRef.current;
         const subNavIcon = subNavIconRef.current;
         const subNavList = subNavListRef.current;
-        const subNavItem=subNavItemRef.current;
+        const subNavItem = subNavItemRef.current;
         if (!navIcon || !navTitle) {
             return
         }
@@ -290,9 +431,9 @@ const StaffSideBarMenu = () => {
                     opacity: 0,
                     ease: 'power1.in'
                 }, '<')
-                .to(subNavItem,{
-                    borderLeft:'none'
-                },'<')
+                .to(subNavItem, {
+                    borderLeft: 'none'
+                }, '<')
 
 
         }
@@ -325,11 +466,11 @@ const StaffSideBarMenu = () => {
                 .to(subNavList, {
                     padding: '0px 6px 0px 15px',
                 }, '<')
-                
-                .to(subNavItem,{
-                    borderLeft:'1px solid var(--secondary-color)',
-                    delay:0.5
-                },'>')
+
+                .to(subNavItem, {
+                    borderLeft: '1px solid var(--shade-color)',
+                    delay: 0.5
+                }, '>')
 
         }
     }
@@ -353,9 +494,77 @@ const StaffSideBarMenu = () => {
         return requiredRole || requiredPermission;
     });
 
+    const previousExpandedIdsRef = useRef<string[]>([]);
 
+    useLayoutEffect(() => {
+        const previousExpandedIds = previousExpandedIdsRef.current;
+
+        // Find which navigation item's state changed.
+        const changedItemId = [
+            ...new Set([
+                ...previousExpandedIds,
+                ...expandedNavItemIds,
+            ]),
+        ].find((id) =>
+            previousExpandedIds.includes(id) !==
+            expandedNavItemIds.includes(id)
+        );
+
+        // Update the previous state for the next render.
+        previousExpandedIdsRef.current = [...expandedNavItemIds];
+
+        if (!changedItemId) return;
+
+        const index = visibleNavItems.findIndex(
+            (item) => item.title === changedItemId
+        );
+
+        if (index === -1) return;
+
+        const element = subNavListRef.current[index];
+
+        if (!element) return;
+
+        const isExpanded = expandedNavItemIds.includes(changedItemId);
+
+        gsap.killTweensOf(element);
+
+        if (isExpanded) {
+            // Measure the full height without animating other items.
+            gsap.set(element, {
+                height: "auto",
+                overflow: "hidden",
+            });
+
+            const fullHeight = element.scrollHeight;
+
+            gsap.fromTo(
+                element,
+                { height: 0 },
+                {
+                    height: fullHeight,
+                    duration: 0.4,
+                    ease: "power1.out",
+                    onComplete: () => {
+                        gsap.set(element, {
+                            height: "auto",
+                            overflow: "visible",
+                        });
+                    },
+                }
+            );
+        } else {
+            // Collapse only the targeted navigation item.
+            gsap.to(element, {
+                height: 0,
+                overflow: "hidden",
+                duration: 0.4,
+                ease: "power1.out",
+            });
+        }
+    }, [expandedNavItemIds, visibleNavItems]);
     const navList = visibleNavItems.map((item, index) => {
-        const isExpanded = expadedNavItemIds.includes(item.title);
+        const isExpanded = expandedNavItemIds.includes(item.title);
         const visibleSubNavItems = item.subNavItems?.filter((item) => {
             const requiredRole = item.roles.some((role) => hasRole(role));
             const requiredPermission = item.permissions.some((permission) => hasPermission(permission))
@@ -378,14 +587,14 @@ const StaffSideBarMenu = () => {
                         }
                         handleNavItemClick(subItem.navLink);
                     }}
-                         ref={(element) => {
-                            if (!subNavItemRef.current[index]) {
-                                subNavItemRef.current[index] = [];
-                            }
+                    ref={(element) => {
+                        if (!subNavItemRef.current[index]) {
+                            subNavItemRef.current[index] = [];
+                        }
 
-                            subNavItemRef.current[index][subIndex] =
-                                element;
-                        }}
+                        subNavItemRef.current[index][subIndex] =
+                            element;
+                    }}
                 >
                     <div className={styles.subNavTitle}
                         ref={(element) => {
@@ -464,15 +673,13 @@ const StaffSideBarMenu = () => {
         );
 
         // Use the parent index when a sub-navigation item is active.
-        const currentActiveIndex =
-            activeIndex !== -1 ? activeIndex : activeSubNavIndex;
+        const currentActiveIndex = activeIndex !== -1 ? activeIndex : activeSubNavIndex;
 
         if (currentActiveIndex === -1) {
             return;
         }
 
         const activeItem = navItemRef.current[currentActiveIndex];
-
         if (!activeItem || !solidNavLeftBarRef.current) {
             return;
         }
@@ -557,6 +764,7 @@ const StaffSideBarMenu = () => {
             },
             "<"
         );
+
 
 
         previousActiveIndexRef.current = currentActiveIndex;
