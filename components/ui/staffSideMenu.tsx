@@ -81,7 +81,7 @@ const navItems: navItem[] = [
                 iconColor: 'var(--secondary-color)',
                 permissions: [],
                 roles: ['admin']
-            },{
+            }, {
                 title: 'Admissions',
                 icon: StudentIcon,
                 // navLink: 'staffPortal/students/addstudents',
@@ -94,10 +94,24 @@ const navItems: navItem[] = [
     {
         title: 'Lectures',
         icon: LectureIcon,
-        navLink: 'staffPortal/lecturers',
         iconColor: 'var(--secondary-color)',
         permissions: ['lecturers.read'],
-        roles: ['lecturer']
+        roles: ['lecturer', 'admin'],
+        subNavItems: [
+            {
+                title: 'Lecturers',
+                icon: LectureIcon, navLink: 'staffPortal/lecturers',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['lecturer']
+            }, {
+                title: 'All lecturers',
+                icon: LectureIcon, navLink: 'staffPortal/allLecturers',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+        ]
     },
     {
         title: 'Class',
@@ -251,7 +265,48 @@ const navItems: navItem[] = [
                 roles: ['admin']
             }
         ]
-    }
+    }, {
+        title: 'Authorization',
+        icon: UserManagementIcon,
+        // navLink: 'staffPortal/students',
+        iconColor: 'var(--secondary-color)',
+        permissions: [],
+        roles: ['admin'],
+        subNavItems: [
+            {
+                title: 'Roles',
+                icon: RolesIcon,
+                navLink: 'staffPortal/userManagement/roles',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Permission',
+                icon: PermissionIcon,
+                navLink: 'staffPortal/userManagement/permissions',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Role permission',
+                icon: PermissionIcon,
+                // navLink: 'staffPortal/userManagement/permissions',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            },
+            {
+                title: 'Subjects',
+                icon: PermissionIcon,
+                navLink: 'staffPortal/authorisation/subjects',
+                iconColor: 'var(--secondary-color)',
+                permissions: [],
+                roles: ['admin']
+            }
+        ]
+    },
 ];
 
 // to do: make filter the sub nav items. on permissions and roles

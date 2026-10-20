@@ -6,6 +6,7 @@ import styles from './styles/addEntity.module.css';
 import { File, FileSpreadsheet } from 'lucide-react';
 import { useApiFetch } from '@/lib/api';
 import gsap from 'gsap';
+import { toast } from 'sonner';
 
 type InputField = {
     fieldName: string;
@@ -28,83 +29,25 @@ type ApiResponse = {
 type AddEntityProp = {
     inputFields?: InputField[];
     uploadEntityUrl?: string;
-    title?:string;
-    description?:string
+    title?: string;
+    description?: string
+    buttonText: string
 };
 
 const AddEntity = ({
-    inputFields = [
-        {
-            fieldName: 'firstName',
-            label: 'First name',
-            inputType: 'text',
-            placeholder: 'Enter first name',
-            required: true,
-        },
-        {
-            fieldName: 'lastName',
-            label: 'Last name',
-            inputType: 'text',
-            placeholder: 'Enter last name',
-            required: true,
-        },
-        {
-            fieldName: 'email',
-            label: 'Email address',
-            inputType: 'email',
-            placeholder: 'Enter email address',
-            required: false,
-        },
-        {
-            fieldName: 'phoneNumber',
-            label: 'Phone number',
-            inputType: 'tel',
-            placeholder: 'Enter phone number',
-            required: true,
-        },
-        {
-            fieldName: 'dateOfBirth',
-            label: 'Date of birth',
-            inputType: 'date',
-            placeholder: '',
-            required: true,
-        }, {
-            fieldName: 'sex',
-            label: 'Sex',
-            inputType: 'dropDown',
-            placeholder: 'Select sex',
-            required: true,
-            options: [
-                { label: 'Male', value: 'male' },
-                { label: 'Female', value: 'female' },
-            ],
-        },
-        {
-            fieldName: 'registrationNumber',
-            label: 'Registration number',
-            inputType: 'text',
-            placeholder: '',
-            required: true,
-        },
-        {
-            fieldName: 'programName',
-            label: 'Program',
-            inputType: 'text',
-            placeholder: '',
-            required: true,
-        },
-    ],
-    uploadEntityUrl = "/students/register-student",
-    title = "Create new student",
-    description = "Register new student into the system"
+    inputFields = [],
+    uploadEntityUrl = "",
+    title = "",
+    description = "",
+    buttonText = ""
 }: AddEntityProp) => {
 
     const [uploading, setUploading] = useState(false);
     const [message, setMessage] = useState("");
     const fileInputRef = useRef<HTMLInputElement>(null);
-    const [isManualUploadSelected, setManualUpload] = useState<boolean>(true);
     const manualSubmissionRef = useRef(null);
     const [isFormValid, setIsFormValid] = useState(false);
+    const formRef=useRef<HTMLFormElement>(null);
 
     const handleInputChange = (event: React.FormEvent<HTMLFormElement>) => {
         setIsFormValid(event.currentTarget.checkValidity());
@@ -114,14 +57,15 @@ const AddEntity = ({
     const apiFetchRef = useRef(apiFetch);
     apiFetchRef.current = apiFetch;
 
-
+    console.log(isFormValid, uploading)
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
         const formData = new FormData(event.currentTarget);
-        formData.append("role", "student");
-        formData.append("password", "student1234");
-        formData.append("enrollmentStatus", "enrolled");
+        // formData.append("role", "student");
+        // formData.append("password", "student1234");
+        // formData.append("enrollmentStatus", "enrolled");
+
         const studentData = Object.fromEntries(formData.entries());
 
         console.log(studentData);
@@ -146,8 +90,9 @@ const AddEntity = ({
                 );
             }
 
-            setMessage("Students imported successfully.");
-
+            setMessage("created successfully");
+            toast.success('created successfully');
+            formRef.current?.reset()
             if (fileInputRef.current) {
                 fileInputRef.current.value = "";
             }
@@ -157,7 +102,9 @@ const AddEntity = ({
                     ? error.message
                     : "Something went wrong."
             );
+            toast.error('Failed')
         } finally {
+            console.log('form',formRef.current)
             setUploading(false);
         }
     };
@@ -171,11 +118,7 @@ const AddEntity = ({
                 {description}
             </div>
             <div className={styles.createOption}>
-                <form onSubmit={handleSubmit} ref={manualSubmissionRef} onClick={
-                    () => {
-                        setManualUpload(true)
-                    }
-                }
+                <form onSubmit={handleSubmit} ref={formRef}
                     onChange={handleInputChange}
                 >
                     <div className={styles.formGrid}>
@@ -233,9 +176,9 @@ const AddEntity = ({
                         </button>
 
                         <button type="submit" className={styles.submitButton}
-                            disabled={!isManualUploadSelected || !isFormValid || !uploading}
+                            disabled={!isFormValid || uploading}
                         >
-                            Register student
+                            {buttonText}
                         </button>
                     </div>
                 </form>

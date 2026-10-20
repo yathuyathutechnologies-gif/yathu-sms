@@ -11,11 +11,9 @@ import AddButton from "@/components/ui/addButton";
 import AddEntity from "@/components/ui/addEntity";
 import { useStaffPortal } from "../../StaffPortalContext";
 import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import MoreButtons from "@/components/ui/moreButton";
 import ExamIcon from "@/components/icons/ExamIcon";
 
-gsap.registerPlugin(ScrollTrigger);
 const AllStudent = () => {
     const path = usePathname();
     const { toggleActions, actionToogleOpen, isAuthLoading } = useStaffPortal();
@@ -63,7 +61,72 @@ const AllStudent = () => {
         >
             <div className={styles.container} ref={containerRef}>
                 <div className={styles.addEntityToogle} ref={addEntityToggleRef}>
-                    <AddEntity />
+                    <AddEntity
+                        title={"Create new student"}
+                        description={"Register new student into the system"}
+                        uploadEntityUrl={"/students/register-student"}
+                        buttonText={'Register student'}
+                        inputFields={[
+                            {
+                                fieldName: 'firstName',
+                                label: 'First name',
+                                inputType: 'text',
+                                placeholder: 'Enter first name',
+                                required: true,
+                            },
+                            {
+                                fieldName: 'lastName',
+                                label: 'Last name',
+                                inputType: 'text',
+                                placeholder: 'Enter last name',
+                                required: true,
+                            },
+                            {
+                                fieldName: 'email',
+                                label: 'Email address',
+                                inputType: 'email',
+                                placeholder: 'Enter email address',
+                                required: false,
+                            },
+                            {
+                                fieldName: 'phoneNumber',
+                                label: 'Phone number',
+                                inputType: 'tel',
+                                placeholder: 'Enter phone number',
+                                required: true,
+                            },
+                            {
+                                fieldName: 'dateOfBirth',
+                                label: 'Date of birth',
+                                inputType: 'date',
+                                placeholder: '',
+                                required: true,
+                            }, {
+                                fieldName: 'sex',
+                                label: 'Sex',
+                                inputType: 'dropDown',
+                                placeholder: 'Select sex',
+                                required: true,
+                                options: [
+                                    { label: 'Male', value: 'male' },
+                                    { label: 'Female', value: 'female' },
+                                ],
+                            },
+                            {
+                                fieldName: 'registrationNumber',
+                                label: 'Registration number',
+                                inputType: 'text',
+                                placeholder: '',
+                                required: true,
+                            },
+                            {
+                                fieldName: 'programName',
+                                label: 'Program',
+                                inputType: 'text',
+                                placeholder: '',
+                                required: true,
+                            },
+                        ]} />
                 </div>
                 <div className={styles.pathAndButtonsContainer}>
                     <div className={styles.pathAndIcon}>
@@ -77,7 +140,7 @@ const AllStudent = () => {
 
                     <div className={styles.topButtons} ref={buttonsContainerRef}>
                         <AddButton
-                        title={"Add student"}
+                            title={"Add student"}
                             // path="/staffPortal/students/add"
                             permissions={["students.create"]}
                             roles={["admin"]}

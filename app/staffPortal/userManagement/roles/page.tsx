@@ -63,7 +63,27 @@ const Roles = () => {
         >
             <div className={styles.container} ref={containerRef}>
                 <div className={styles.addEntityToogle} ref={addEntityToggleRef}>
-                    <AddEntity />
+                    <AddEntity
+                        title={"Create new role"}
+                        description={"Register new role into the system."}
+                        uploadEntityUrl={"/authorisation/create-role"}
+                        buttonText={'Create role'}
+                        inputFields={[
+                            {
+                                fieldName: 'roleName',
+                                label: 'Role',
+                                inputType: 'text',
+                                placeholder: 'Enter role',
+                                required: true,
+                            },
+                            {
+                                fieldName: 'description',
+                                label: 'Description',
+                                inputType: 'text',
+                                placeholder: 'Enter description for the role',
+                                required: true,
+                            }
+                        ]} />
                 </div>
                 <div className={styles.pathAndButtonsContainer}>
                     <div className={styles.pathAndIcon}>
@@ -77,7 +97,7 @@ const Roles = () => {
 
                     <div className={styles.topButtons} ref={buttonsContainerRef}>
                         <AddButton
-                        title={'Add role'}
+                            title={'Add role'}
                             permissions={["students.create"]}
                             roles={["admin"]}
                             icon={PlusCircle}
